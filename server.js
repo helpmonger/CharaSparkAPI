@@ -21,13 +21,18 @@ var portNumber = process.env.PORT || 8080;
 // server.use(restify.bodyParser());
 
 // parse various different custom JSON types as JSON
-server.use(bodyParser.json({ type: 'application/*+json' }))
+// server.use(bodyParser.json({ type: 'application/*+json' }))
 
-// parse some custom thing into a Buffer
-server.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
+// // parse some custom thing into a Buffer
+// server.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
 
-// parse an HTML body into a string
-server.use(bodyParser.text({ type: 'text/html' }))
+// // parse an HTML body into a string
+// server.use(bodyParser.text({ type: 'text/html' }))
+
+server.use(bodyParser.urlencoded({
+	extended: true
+}));
+
 
 server.set('port',portNumber);
 

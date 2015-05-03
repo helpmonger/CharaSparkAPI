@@ -3,7 +3,8 @@ jwt = require('jsonwebtoken'),
 User = mongoose.model('User');
 
 
-exports.SignUp = function(req , res , next){
+exports.SignUp = function(req, res){
+    console.log('in signup');
     var user = {};
     user.password = req.params.password;
     user.user_name = req.params.user_name;
@@ -12,29 +13,29 @@ exports.SignUp = function(req , res , next){
  
     res.setHeader('Access-Control-Allow-Origin','*');
  
-    users.save(user , function(err , success){
+    User.save(user , function(err , success){
         console.log('Response success ', success);
         console.log('Response error ', err);
         if(success){
-            res.send(201 , user);
-            return next();
+            return res.status(201).send(user);
         }else{
-            return next(err);
+            return res.status(409).send(err);
         }
     });
 } //end of sign up
 
-exports.Login = function(req , res , next){
+exports.Login = function(req, res){
+    console.log('in login');
     var user = {};
  
     res.setHeader('Access-Control-Allow-Origin','*');
  
     console.log('User name is: ', req.params.user_name);
     var userfromdb;
-    users.findOne({user_name:req.params.user_name}, function(err, data){
+    User.findOne({user_name:req.params.user_name}, function(err, data){
     	if(err){
     		console.log('err is: ', err);
-    		return next(err);
+    		return res.status(409).send(err);
     	}
     	else {
     		userfromdb = data;
@@ -44,7 +45,7 @@ exports.Login = function(req , res , next){
     		{
     			console.log("log in successfull");
     			data.success = true;
-    			return res.send(201 , data);
+    			return res.status(201).send(data);
     		}
     		else
     		{
@@ -55,7 +56,7 @@ exports.Login = function(req , res , next){
     			data.success = false;
     			data.password = "";
     			data.email = "";
-    			return res.send(201 , data);
+    			return res.status(201).send(data);
     		}
     	}
     });
