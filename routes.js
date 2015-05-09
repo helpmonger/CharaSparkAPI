@@ -29,6 +29,9 @@ module.exports = function(server){
 
 	var User = require('./controllers/user');
 	server.get(PATH +'Test', User.test);
+	
+	// get user object
+	server.get(PATH + 'user', User.getProfile);
 
 
 // app.put(baseURL + '/companies/:id', Companies.update);

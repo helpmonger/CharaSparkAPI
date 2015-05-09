@@ -18,4 +18,10 @@ exports.test = function(req, res){
 	console.log('foo');
 	return res.send({result: 'success'});
 };
+
+exports.getProfile = function(req, res){
+	User.find({},function(err, results) {
+	    return res.send(results);
+	  });
 	
+}
