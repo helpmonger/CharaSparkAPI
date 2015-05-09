@@ -22,8 +22,8 @@ module.exports = function(server){
 
 
 	var Wish = require('./controllers/wish');
-	server.post(PATH +'AddWish', Wish.AddWish);
-	server.get(PATH +'Wishes', Wish.All);
+	server.post(PATH +'Wish', Wish.AddWish);
+	server.get(PATH +'Wish', Wish.findAll);
 
 	// console.log('done with routes'); 
 

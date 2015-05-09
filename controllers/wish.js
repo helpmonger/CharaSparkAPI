@@ -1,20 +1,18 @@
 var mongoose = require('mongoose');
 var Wish = mongoose.model('Wish');
 
-exports.AddWish = function(req , res , next){
-    req.params.postedOn = new Date();
-    res.setHeader('Access-Control-Allow-Origin','*');
-    wishes.save(req.params , function(err , success){
-        console.log('Response success ', success);
-        console.log('Response error ', err);
-        if(success){
-            res.send(201 , wishes);
-            return next();
-        }else{
-            return next(err);
-        }
-    });
+exports.AddWish = function(req, res) {
+  Wish.create(req.body, function (err, Wish) {
+    if (err) return console.log(err);
+    return res.send(Wish);
+  });
 }
+
+exports.findAll = function(req, res){
+    Wish.find({},function(err, results) {
+        return res.send(results);
+    });
+};
 
 
 exports.All = function(req , res , next){
