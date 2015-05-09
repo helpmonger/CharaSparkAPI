@@ -30,3 +30,21 @@ exports.getProfile = function(req, res){
 		}
 	});
 };
+
+exports.updateProfile = function(req, res){
+	
+	var query = req.params.userID;
+	var update = req.body;
+	
+	User.findOneAndUpdate(query, update, function(err, data){
+		if(err){
+			console.log('err is:', err);
+			return next(err);
+		}
+		else{
+			console.log('updated');
+			return res.send(201, data);
+		}
+	});
+};
+
