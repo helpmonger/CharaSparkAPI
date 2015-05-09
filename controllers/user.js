@@ -13,3 +13,9 @@ exports.add = function(req, res) {
     return res.send(musician);
   });
 }
+
+exports.test = function(req, res){
+	console.log('foo');
+	return res.send({result: 'success'});
+};
+	

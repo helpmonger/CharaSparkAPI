@@ -25,12 +25,10 @@ module.exports = function(server){
 	server.post(PATH +'AddWish', Wish.AddWish);
 	server.get(PATH +'Wishes', Wish.All);
 
-	// console.log('done with routes');
+	// console.log('done with routes'); 
 
-	server.get(PATH + 'test', function(req, res){
-		console.log('foo');
-		return res.send({result: 'success'});
-	});
+	var User = require('./controllers/user');
+	server.get(PATH +'Test', User.test);
 
 
 // app.put(baseURL + '/companies/:id', Companies.update);
