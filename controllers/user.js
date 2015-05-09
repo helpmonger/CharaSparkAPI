@@ -12,10 +12,39 @@ exports.add = function(req, res) {
     if (err) return console.log(err);
     return res.send(musician);
   });
-}
+};
 
 exports.test = function(req, res){
 	console.log('foo');
 	return res.send({result: 'success'});
 };
+
+exports.getProfile = function(req, res){
+	User.findOne({_id: req.params.userID}, function(err, data) {
+		if(err){
+			console.log('err is:', err);
+			return res.send(err);
+		}
+		else{
+			res.send(201, data);
+		}
+	});
+};
+
+exports.updateProfile = function(req, res){
 	
+	var query = req.params.userID;
+	var update = req.body;
+	
+	User.findOneAndUpdate(query, update, function(err, data){
+		if(err){
+			console.log('err is:', err);
+			return res.send(err);
+		}
+		else{
+			console.log('updated');
+			return res.send(201, data);
+		}
+	});
+};
+

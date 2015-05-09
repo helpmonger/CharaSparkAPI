@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
 Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-  user_id: {
+  user_name: {
 		type: String,
 		required: true
 	},
