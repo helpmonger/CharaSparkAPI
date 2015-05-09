@@ -12,7 +12,7 @@ exports.add = function(req, res) {
     if (err) return console.log(err);
     return res.send(musician);
   });
-}
+};
 
 exports.test = function(req, res){
 	console.log('foo');
@@ -20,8 +20,14 @@ exports.test = function(req, res){
 };
 
 exports.getProfile = function(req, res){
-	User.find({},function(err, results) {
-	    return res.send(results);
-	  });
+	User.findOne({_id: req.params.userID}, function(err, data) {
+		if(err){
+			console.log('err is:', err);
+			return next(err);
+		}
+		else{
+			res.send(201, data);
+		}
 	
-}
+	});
+};

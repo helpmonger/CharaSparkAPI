@@ -30,9 +30,13 @@ module.exports = function(server){
 	var User = require('./controllers/user');
 	server.get(PATH +'Test', User.test);
 	
-	// get user object
-	server.get(PATH + 'user', User.getProfile);
-
+	// get user object by userName
+//	server.get(PATH + 'user/:userName', User.getProfile);
+	
+	// get user object by UserID
+	server.get(PATH + 'user/:userID', User.getProfile);
+	
+	
 
 // app.put(baseURL + '/companies/:id', Companies.update);
 	// server.post({path : PATH +'GetDonations', version: versionNo}, GetDonations);
