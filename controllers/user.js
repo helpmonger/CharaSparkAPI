@@ -23,7 +23,7 @@ exports.getProfile = function(req, res){
 	User.findOne({_id: req.params.userID}, function(err, data) {
 		if(err){
 			console.log('err is:', err);
-			return next(err);
+			return res.send(err);
 		}
 		else{
 			res.send(201, data);
@@ -39,7 +39,7 @@ exports.updateProfile = function(req, res){
 	User.findOneAndUpdate(query, update, function(err, data){
 		if(err){
 			console.log('err is:', err);
-			return next(err);
+			return res.send(err);
 		}
 		else{
 			console.log('updated');
