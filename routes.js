@@ -28,6 +28,8 @@ module.exports = function(server){
 	var Charity = require('./controllers/charity');
 	server.post(PATH +'charity', Charity.add);
 	server.get(PATH +'charity', Charity.findAll);
+	server.put(PATH +'charity/:charityID', Charity.updateCharity);
+	server.get(PATH +'charity/:charityID', Charity.findCharity);
 
 	// console.log('done with routes'); 
 
