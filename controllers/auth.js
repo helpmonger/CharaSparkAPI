@@ -6,6 +6,7 @@ User = mongoose.model('User');
 exports.SignUp = function(req, res){
     console.log('in signup');
     var user = {};
+    console.log(req);
     user.password = req.params.password;
     user.user_name = req.params.user_name;
     user.email = req.params.email;
