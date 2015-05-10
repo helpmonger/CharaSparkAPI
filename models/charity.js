@@ -11,22 +11,26 @@ var CharitySchema = new Schema({
 		unique: true,
 		required: true,
 	},
-	taxID: {
-		type: String,
-	},
 	address: {
 	    address: String,
 	    address_2:  String,
 	    city: String,
 	    state: String,
 	    zipcode: String
-		},
+	},
 	phone: {
 		type: String,
 	},
 	createdDate: { 
 		type: Date, 
 		default: Date.now 
+	},
+	category: {
+		type: String
+	},
+	gps: {
+		long: Number,  //longitude
+		lat: Number	//latitude
 	}
 });
 
