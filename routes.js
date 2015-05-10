@@ -22,12 +22,17 @@ module.exports = function(server){
 
 
 	var Wish = require('./controllers/wish');
-	server.post(PATH +'AddWish', Wish.AddWish);
-	server.get(PATH +'Wishes', Wish.All);
+	server.post(PATH +'Wish', Wish.AddWish);
+	server.get(PATH +'Wish', Wish.findAll);
+	server.put(PATH +'Wish/:wishID', Wish.updateWish);
+	server.get(PATH +'Wish/:wishID', Wish.findWish);
+
 
 	var Charity = require('./controllers/charity');
 	server.post(PATH +'charity', Charity.add);
 	server.get(PATH +'charity', Charity.findAll);
+	server.put(PATH +'charity/:charityID', Charity.updateCharity);
+	server.get(PATH +'charity/:charityID', Charity.findCharity);
 
 	// console.log('done with routes'); 
 

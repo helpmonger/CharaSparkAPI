@@ -1,0 +1,19 @@
+[
+{ 	name: "Special Olympics South Carolina",
+	email: "bcoats@so-sc.org",  
+	address: {
+	    address: "1276 Assembly Street",
+	    address_2:  ,
+	    city: "Columbia",
+	    state: "SC",
+	    zipcode: "29201"
+	},
+	phone: "803-772-1555",
+	createdDate: Date.now, 
+	category: "Social Welfare/Human Rights",
+	gps: {
+		long: 34.001809,  //longitude
+		lat: -81.035330	//latitude
+	}
+},
+];

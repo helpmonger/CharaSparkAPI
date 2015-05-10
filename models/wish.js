@@ -1,29 +1,53 @@
-var mongoose = require('mongoose'),
-Schema = mongoose.Schema;
+  var mongoose = require('mongoose'),
+  Schema = mongoose.Schema;
 
-var WishSchema = new Schema({
-  _donor : { type: Number, ref: 'User' },
-  _fulfiller : { type: Number, ref: 'User' },
-  _charity: {type: Number, ref: 'Charity' },
-  title: {
-    type: String,
-    required: true,
+  var WishSchema = new Schema({
+    _donor : { 
+      type: Schema.Types.ObjectId, 
+      ref: 'User' 
+    },
+    _fulfiller : { 
+      type: Schema.Types.ObjectId, 
+      ref: 'User' 
+    },
+    _charity: {
+      type: Schema.Types.ObjectId, 
+      ref: 'Charity' 
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    donationAmt: {
+      type: String,
+      required: true
+    },
+    hasPaid: {
+    type: Boolean,
+    required: true
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  donationAmt: {
-    type: String,
-    required: true,
-  },
-  hasPaid: Boolean,
-  wishStatus: String,
-  createdDate: { type: Date, default: Date.now },
-  location      : {
-        longitude : String
-      , latitude  : String
+    wishStatus: {
+      type: String,
+      required: true
+    },
+    createdDate: { 
+      type: Date, 
+      default: Date.now 
+    },
+    location: {
+          longitude : String
+        , latitude  : String
+      },
+    startDate: { 
+      type: Date
+    },
+    expireDate: { 
+      type: Date
     }
-});
+  });
 
-mongoose.model('Wish', WishSchema);
+  mongoose.model('Wish', WishSchema);
