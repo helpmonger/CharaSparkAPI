@@ -19,7 +19,7 @@ var CharitySchema = new Schema({
 	    zipcode: String
 	},
 	phone: {
-		type: String,
+		type: String
 	},
 	createdDate: { 
 		type: Date, 
@@ -28,9 +28,9 @@ var CharitySchema = new Schema({
 	category: {
 		type: String
 	},
-	gps: {
-		long: Number,  //longitude
-		lat: Number	//latitude
+	gps: [Number],
+	url: {
+		type: String
 	}
 });
 
