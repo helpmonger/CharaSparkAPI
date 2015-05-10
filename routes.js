@@ -12,8 +12,8 @@ module.exports = function(server){
 	var versionNo = '0.0.1';
 
 	var Auth = require('./controllers/auth');
-//	server.post(PATH + 'signup', Auth.SignUp);
-//	server.post(PATH +'login', Auth.Login);
+	server.post(PATH + 'signup', Auth.SignUp);
+	server.post(PATH +'login', Auth.Login);
 
 
 	var Braintree = require('./controllers/braintree');
@@ -42,6 +42,10 @@ module.exports = function(server){
 	
 	// update a user by UserID 
 	server.put(PATH + 'user/:userID', User.updateProfile);
+	
+	// get all users
+	server.get(PATH + 'user', User.findAll);
+	
 
 // app.put(baseURL + '/companies/:id', Companies.update);
 	// server.post({path : PATH +'GetDonations', version: versionNo}, GetDonations);

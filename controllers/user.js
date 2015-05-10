@@ -19,6 +19,9 @@ exports.test = function(req, res){
 	return res.send({result: 'success'});
 };
 
+
+
+
 exports.getProfile = function(req, res){
 	User.findOne({_id: req.params.userID}, function(err, data) {
 		if(err){
@@ -45,6 +48,8 @@ exports.updateProfile = function(req, res){
 			console.log('updated');
 			return res.send(201, data);
 		}
+//		err = {};
+//		res.send(err);
 	});
 };
 
