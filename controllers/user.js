@@ -2,12 +2,14 @@ var mongoose = require('mongoose'),
 User = mongoose.model('User');
 
 exports.findAll = function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*'); 
   User.find({},function(err, results) {
     return res.send(results);
   });
 };
 
 exports.add = function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin','*');
   User.create(req.body, function (err, musician) {
     if (err) return console.log(err);
     return res.send(musician);
@@ -15,6 +17,7 @@ exports.add = function(req, res) {
 };
 
 exports.test = function(req, res){
+	res.setHeader('Access-Control-Allow-Origin','*');
 	console.log('foo');
 	return res.send({result: 'success'});
 };
@@ -23,6 +26,7 @@ exports.test = function(req, res){
 
 
 exports.getProfile = function(req, res){
+	res.setHeader('Access-Control-Allow-Origin','*');
 	User.findOne({_id: req.params.userID}, function(err, data) {
 		if(err){
 			console.log('err is:', err);
@@ -35,7 +39,7 @@ exports.getProfile = function(req, res){
 };
 
 exports.updateProfile = function(req, res){
-	
+	res.setHeader('Access-Control-Allow-Origin','*');
 	var query = req.params.userID;
 	var update = req.body;
 	
