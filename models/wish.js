@@ -2,7 +2,7 @@
   Schema = mongoose.Schema;
 
   var WishSchema = new Schema({
-    _donor : { 
+    _wishMaker : { 
       type: Schema.Types.ObjectId, 
       ref: 'User' 
     },
@@ -21,15 +21,7 @@
     description: {
       type: String,
       required: true
-    },
-    donationAmt: {
-      type: String,
-      required: true
-    },
-    hasPaid: {
-    type: Boolean,
-    required: true
-  },
+    },    
     wishStatus: {
       type: String,
       required: true
@@ -38,10 +30,7 @@
       type: Date, 
       default: Date.now 
     },
-    location: {
-          longitude : String
-        , latitude  : String
-      },
+    location: [Number],
     startDate: { 
       type: Date
     },
