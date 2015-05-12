@@ -29,7 +29,6 @@ exports.getToken = function(req, res , next){
 }
 
 exports.processPayment = function(req, res, next){
-  res.setHeader('Access-Control-Allow-Origin','*');
   console.log('req.body.amount is ' + req.params.amount);
   console.log('req.body.nounce is ' + req.params.nounce);
 

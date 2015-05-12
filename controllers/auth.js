@@ -1,10 +1,11 @@
 var mongoose = require('mongoose'),
-jwt = require('jsonwebtoken'),
-User = mongoose.model('User');
+// jwt = require('jsonwebtoken'),
+User = mongoose.model('User'),
+passport = require('passport');
 
 
 exports.SignUp = function(req, res){
-    res.setHeader('Access-Control-Allow-Origin','*');
+    // res.setHeader('Access-Control-Allow-Origin','*');
     console.log('in signup');
     
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -21,7 +22,7 @@ exports.SignUp = function(req, res){
 } //end of sign up
 
 exports.Login = function(req, res){
-    res.setHeader('Access-Control-Allow-Origin','*');
+    // res.setHeader('Access-Control-Allow-Origin','*');
 	userName = req.body.user_name;	
 	
     User.findOne({user_name:userName}, function(err, data){

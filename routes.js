@@ -1,4 +1,7 @@
-module.exports = function(server){
+var passport = require('passport');
+var createSendToken = require('./services/auth/jwt');
+
+module.exports = function(app){
 	
 
 	
@@ -11,45 +14,57 @@ module.exports = function(server){
 
 	var versionNo = '0.0.1';
 
-	var Auth = require('./controllers/auth');
-	server.post(PATH + 'signup', Auth.SignUp);
-	server.post(PATH +'login', Auth.Login);
+	// var Auth = require('./controllers/auth');
+	// app.post(PATH + 'register', Auth.SignUp);
+	// app.post(PATH +'login', Auth.Login);
+
+	
+	app.post('/register', passport.authenticate('local-register'), function (req, res) {
+		console.log('in register');
+		createSendToken(req.user, res);
+	});
+	
+
+	app.post('/login', passport.authenticate('local-login'), function (req, res) {
+		console.log('in login');
+		createSendToken(req.user, res);
+	});
 
 
 	var Braintree = require('./controllers/braintree');
-	server.get(PATH + 'token', Braintree.getToken);
-	server.post(PATH +'processPayment', Braintree.processPayment);
+	app.get(PATH + 'token', Braintree.getToken);
+	app.post(PATH +'processPayment', Braintree.processPayment);
 
 
 	var Wish = require('./controllers/wish');
-	server.post(PATH +'Wish', Wish.AddWish);
-	server.get(PATH +'Wish', Wish.findAll);
-	server.put(PATH +'Wish/:wishID', Wish.updateWish);
-	server.get(PATH +'Wish/:wishID', Wish.findWish);
+	app.post(PATH +'Wish', Wish.AddWish);
+	app.get(PATH +'Wish', Wish.findAll);
+	app.put(PATH +'Wish/:wishID', Wish.updateWish);
+	app.get(PATH +'Wish/:wishID', Wish.findWish);
 
 
 	var Charity = require('./controllers/charity');
-	server.post(PATH +'charity', Charity.add);
-	server.get(PATH +'charity', Charity.findAll);
-	server.put(PATH +'charity/:charityID', Charity.updateCharity);
-	server.get(PATH +'charity/:charityID', Charity.findCharity);
+	app.post(PATH +'charity', Charity.add);
+	app.get(PATH +'charity', Charity.findAll);
+	app.put(PATH +'charity/:charityID', Charity.updateCharity);
+	app.get(PATH +'charity/:charityID', Charity.findCharity);
 
 	// console.log('done with routes'); 
 
 	var User = require('./controllers/user');
-	server.get(PATH +'Test', User.test);
+	app.get(PATH +'Test', User.test);
 	
 	// get user object by userName
-//	server.get(PATH + 'user/:userName', User.getProfile);
+//	app.get(PATH + 'user/:userName', User.getProfile);
 	
 	// get user object by UserID
-	server.get(PATH + 'user/:userID', User.getProfile);
+	app.get(PATH + 'user/:userID', User.getProfile);
 	
 	// update a user by UserID 
-	server.put(PATH + 'user/:userID', User.updateProfile);
+	app.put(PATH + 'user/:userID', User.updateProfile);
 	
 	// get all users
-	server.get(PATH + 'user', User.findAll);
+	app.get(PATH + 'user', User.findAll);
 	
 
 // app.put(baseURL + '/companies/:id', Companies.update);

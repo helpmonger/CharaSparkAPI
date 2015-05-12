@@ -1,11 +1,19 @@
 var mongoose = require('mongoose'),
+bcrypt = require('bcrypt-nodejs'),
 Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-  user_name: {
+  display_name: {
 		type: String,
-		required: true
+		// required: true
 	},
+
+	googleId: String,
+
+	facebookId: String,
+	
+	active: Boolean,
+
   email: {
 		type: String,
 		unique: true,
@@ -23,5 +31,32 @@ var UserSchema = new Schema({
   	default: Date.now 
   }
 });
+
+UserSchema.methods.toJSON = function () {
+	var user = this.toObject();
+	delete user.password;
+	return user;
+};
+
+UserSchema.methods.comparePasswords = function (password, callback) {
+	bcrypt.compare(password, this.password, callback);
+}
+
+UserSchema.pre('save', function (next) {
+	var user = this;
+
+	if (!user.isModified()) return next();
+
+	bcrypt.genSalt(10, function (err, salt) {
+		if (err) return next(err);
+
+		bcrypt.hash(user.password, salt, null, function (err, hash) {
+			if (err) return next(err);
+
+			user.password = hash;
+			next();
+		})
+	})
+})
 
 mongoose.model('User', UserSchema);
