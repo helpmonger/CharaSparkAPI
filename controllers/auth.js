@@ -5,6 +5,7 @@ User = mongoose.model('User');
 
 exports.Register = function(req, res){
     console.log('in signup');
+    console.log('req body is: ', req.body);
     User.create(req.body, function(err, results){
     	if(err){
     		return console.log(err);
