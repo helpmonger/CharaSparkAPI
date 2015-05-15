@@ -33,16 +33,23 @@ exports.login = new LocalStrategy(strategyOptions, function (email, password, do
 
 exports.register = new LocalStrategy(strategyOptions, function (email, password, done) {
 
+	console.log('in reigster2');
 	var searchUser = {
 		email: email
 	};
 
 	User.findOne(searchUser, function (err, user) {
-		if (err) return done(err);
+		if (err) {
+			handleError(err);
+			return done(err);
+		}
 
-		if (user) return done(null, false, {
-			message: 'email already exists'
-		});
+		if (user) {
+				console.log('user already exists!');
+				return done(null, false, {
+				message: 'email already exists'
+			});
+		}
 
 		var newUser = new User({
 			email: email,
@@ -50,8 +57,15 @@ exports.register = new LocalStrategy(strategyOptions, function (email, password,
 		});
 
 		newUser.save(function (err) {
-			if(err) return done(err);			
+			if (err) {
+				handleError(err);
+				return done(err);
+		}		
 			done(null, newUser);
 		})
 	});
 });
+
+function handleError(msg){
+	console.log('the err is: ', msg);
+}
