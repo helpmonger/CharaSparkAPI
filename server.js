@@ -56,6 +56,7 @@ app.use(function (req, res, next) {
 
 require('./models/charity');
 require('./models/wish');
+require('./models/donation');
 require('./models/user');
 
 
