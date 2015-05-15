@@ -1,5 +1,6 @@
 var passport = require('passport');
 var createSendToken = require('./services/auth/jwt');
+var flash = require('connect-flash');
 
 module.exports = function(app){
 	
@@ -22,6 +23,7 @@ module.exports = function(app){
 	
 	app.post('/register', passport.authenticate('local-register', 
 								   { failureFlash: true }), function (req, res) {
+		req.flash();
 		console.log('in register');
 		createSendToken(req.user, res);
 	});

@@ -3,6 +3,10 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var jwt = require('jwt-simple');
 var passport = require('passport');
+var flash = require('connect-flash');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var cryptUtil = require('./services/auth/cryptoUtil');
 
 
 
@@ -41,6 +45,16 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 app.use(passport.initialize());
+// app.use(express.cookieParser('keyboard cat'));
+app.use(cookieParser());
+// app.use(express.session({ cookie: { maxAge: 60000 }}));
+app.use(session({
+  genid: function(req) {
+    return cryptUtil.genuuid(); // use UUIDs for session IDs
+  },
+  secret: 'keyboard cat'
+}))
+app.use(flash());
 
 //alliow cross origin requests
 app.use(function (req, res, next) {
