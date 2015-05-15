@@ -1,9 +1,12 @@
 var mongoose = require('mongoose'),
-jwt = require('jsonwebtoken'),
-User = mongoose.model('User');
+// jwt = require('jsonwebtoken'),
+User = mongoose.model('User'),
+passport = require('passport');
+
 
 
 exports.Register = function(req, res){
+    // res.setHeader('Access-Control-Allow-Origin','*');
     console.log('in signup');
     console.log('req body is: ', req.body);
     User.create(req.body, function(err, results){
@@ -18,6 +21,7 @@ exports.Register = function(req, res){
 } //end of sign up
 
 exports.Login = function(req, res){
+
 	userName = req.body.user_name;	
 	
     User.findOne({user_name:userName}, function(err, data){

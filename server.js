@@ -1,6 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var jwt = require('jwt-simple');
+var passport = require('passport');
+
+
+
 
 var mongoUri = 'mongodb://testuser:coconut1@ds061651.mongolab.com:61651/charaspark';
 mongoose.connect(mongoUri);
@@ -11,31 +16,34 @@ db.on('error', function () {
 });
 
 
-var server = express();
+var app = express();
 
 var portNumber = process.env.PORT || 8080;
 
 
-// server.use(restify.acceptParser(server.acceptable));
-// server.use(restify.queryParser());
-// server.use(restify.bodyParser());
+// app.use(restify.acceptParser(app.acceptable));
+// app.use(restify.queryParser());
+// app.use(restify.bodyParser());
 
 // parse various different custom JSON types as JSON
-// server.use(bodyParser.json({ type: 'application/*+json' }))
+// app.use(bodyParser.json({ type: 'application/*+json' }))
 
 // // parse some custom thing into a Buffer
-// server.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
+// app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
 
 // // parse an HTML body into a string
-// server.use(bodyParser.text({ type: 'text/html' }))
+// app.use(bodyParser.text({ type: 'text/html' }))
 
-server.use(bodyParser.urlencoded({
+app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
-server.use(bodyParser.json());
 
-server.use(function (req, res, next) {
+app.use(bodyParser.json());
+app.use(passport.initialize());
+
+//alliow cross origin requests
+app.use(function (req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
 	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -44,17 +52,30 @@ server.use(function (req, res, next) {
 });
 
 
+passport.serializeUser(function (user, done) {
+	done(null, user.id);
+});
 
-server.set('port',portNumber);
 
 require('./models/charity');
 require('./models/wish');
+require('./models/donation');
 require('./models/user');
 
-require('./routes')(server);
 
-server.listen(server.get('port'), function() {
-  console.log("Node app is running at localhost:" + server.get('port'))
+var localStrategy = require('./services/auth/localAuth');
+passport.use('local-register', localStrategy.register);
+passport.use('local-login', localStrategy.login);
+
+
+app.set('port',portNumber);
+
+
+
+require('./routes')(app);
+
+app.listen(app.get('port'), function() {
+  console.log("Node app is running at localhost:" + app.get('port'))
 })
 
 
