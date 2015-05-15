@@ -3,12 +3,8 @@ jwt = require('jsonwebtoken'),
 User = mongoose.model('User');
 
 
-exports.SignUp = function(req, res){
-    res.setHeader('Access-Control-Allow-Origin','*');
+exports.Register = function(req, res){
     console.log('in signup');
-    
-    res.setHeader('Access-Control-Allow-Origin','*');
- 
     User.create(req.body, function(err, results){
     	if(err){
     		return console.log(err);
@@ -21,7 +17,6 @@ exports.SignUp = function(req, res){
 } //end of sign up
 
 exports.Login = function(req, res){
-    res.setHeader('Access-Control-Allow-Origin','*');
 	userName = req.body.user_name;	
 	
     User.findOne({user_name:userName}, function(err, data){

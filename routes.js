@@ -12,7 +12,7 @@ module.exports = function(server){
 	var versionNo = '0.0.1';
 
 	var Auth = require('./controllers/auth');
-	server.post(PATH + 'signup', Auth.SignUp);
+	server.post(PATH + 'register', Auth.Register);
 	server.post(PATH +'login', Auth.Login);
 
 
