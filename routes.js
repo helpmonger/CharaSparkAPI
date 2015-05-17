@@ -21,7 +21,7 @@ module.exports = function(app){
 	// app.post(PATH +'login', Auth.Login);
 
 	
-	app.post('/register', passport.authenticate('local-register', 
+	app.post(PATH + 'register', passport.authenticate('local-register', 
 								   { failureFlash: true }), function (req, res) {
 		req.flash();
 		console.log('in register');
@@ -29,7 +29,7 @@ module.exports = function(app){
 	});
 	
 
-	app.post('/login', passport.authenticate('local-login'), function (req, res) {
+	app.post(PATH + 'login', passport.authenticate('local-login'), function (req, res) {
 		console.log('in login');
 		createSendToken(req.user, res);
 	});
