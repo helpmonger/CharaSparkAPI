@@ -12,7 +12,7 @@ exports.validateToken = function(req){
 		console.log('token null');
 		return false;
 	}
-	var token = token.split(' ')[1];
+	var token = token.split(' ')[0];
 	var payload = jwt.decode(token, "shhh..");
 
 	if (!payload.sub || !payload.exp) {
