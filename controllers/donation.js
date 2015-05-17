@@ -43,3 +43,18 @@ exports.findDonation = function(req, res){
 	    }
   });
 };
+
+//Find all donations from one user
+exports.findDonationsFromUser = function(req, res){
+	  Donation
+	  .find({_donor: req.params.userID})
+	  .populate('_donor', 'user_name')
+//	  .populate('_charity', 'name')
+	  .exec(function(err, results) {
+	    if(err){
+	      console.log(err);
+	    }else{
+	      return res.send(results);
+	    }
+  });
+};
