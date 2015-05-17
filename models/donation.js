@@ -14,12 +14,13 @@
       type: Schema.Types.ObjectId, 
       ref: 'Wish' 
     },
-    Amount: {
+    amount: {
       type: Number,
       required: true
     },
     paidDate: {
-      type: Date
+      type: Date,
+      default: Date.now
     },
     createdDate: { 
       type: Date, 

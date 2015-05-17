@@ -170,3 +170,19 @@ exports.UpdateWishAsPaid = function(req , res , next){
 
          });
 	}
+
+
+// Find all wishes from one user
+exports.findWishesFromUser = function(req, res){
+	  Wish
+	  .find({_wishMaker: req.params.userID})
+	  .populate('_wishMaker', 'user_name')
+//	  .populate('_charity', 'name')
+	  .exec(function(err, results) {
+	    if(err){
+	      console.log(err);
+	    }else{
+	      return res.send(results);
+	    }
+	  });
+	}
