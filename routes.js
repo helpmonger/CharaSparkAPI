@@ -69,6 +69,14 @@ module.exports = function(app){
 	
 	// get all users
 	app.get(PATH + 'user', User.findAll);
+
+	//test
+	app.get('/flash', function(req, res){
+		console.log('flash');
+  // Set a flash message by passing the key, followed by the value, to req.flash().
+	  req.flash('info', 'Flash is back!')
+	  res.redirect('/');
+	});
 	
 
 // app.put(baseURL + '/companies/:id', Companies.update);

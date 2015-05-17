@@ -1,5 +1,5 @@
 var crypt = require('crypto');
 
-module.exports =  function genuuid(){
+exports.genuuid =  function(){
 	return crypt.randomBytes(48).toString('hex');
 }

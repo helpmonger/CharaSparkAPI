@@ -11,7 +11,8 @@ var cryptUtil = require('./services/auth/cryptoUtil');
 
 
 
-var mongoUri = 'mongodb://testuser:coconut1@ds061651.mongolab.com:61651/charaspark';
+// var mongoUri = 'mongodb://testuser:coconut1@ds061651.mongolab.com:61651/charaspark';
+var mongoUri = 'mongodb://mUser:test123@127.0.0.1:27017/charaspark';
 mongoose.connect(mongoUri);
 var db = mongoose.connection;
 
@@ -45,6 +46,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 app.use(passport.initialize());
+
 // app.use(express.cookieParser('keyboard cat'));
 app.use(cookieParser());
 // app.use(express.session({ cookie: { maxAge: 60000 }}));
