@@ -1,11 +1,19 @@
 var mongoose = require('mongoose');
 var Wish = mongoose.model('Wish');
+var crypUtil = require('../services/auth/cryptoUtil');
 
 exports.AddWish = function(req, res) {
-  Wish.create(req.body, function (err, Wish) {
-    if (err) return console.log(err);
-    return res.send(Wish);
-  });
+    if(crypUtil.validateToken(req)) {
+      Wish.create(req.body, function (err, Wish) {
+        if (err) return console.log(err);
+        return res.send(200, Wish);
+      });
+    }
+    else {
+        res.send(401, {
+            message: 'You are not authorized'
+        });
+    }
 }
 
 exports.findAll = function(req, res){
