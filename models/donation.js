@@ -14,7 +14,7 @@
       type: Schema.Types.ObjectId, 
       ref: 'Wish' 
     },
-    Amount: {
+    amount: {
       type: Number,
       required: true
     },
