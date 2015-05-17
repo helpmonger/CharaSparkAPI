@@ -57,4 +57,4 @@ exports.findDonationsFromUser = function(req, res){
 	      return res.send(results);
 	    }
   });
-};
+}; 
