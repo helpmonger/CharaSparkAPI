@@ -169,6 +169,7 @@ exports.findWishesFromUser = function(req, res){
 	  Wish
 	  .find({_wishMaker: req.params.userID})
 	  .populate('_wishMaker', 'user_name')
+//	  .populate('_charity', 'name')
 	  .exec(function(err, results) {
 	    if(err){
 	      console.log(err);
