@@ -21,15 +21,16 @@ module.exports = function(app){
 	// app.post(PATH +'login', Auth.Login);
 
 	
-	app.post('/register', passport.authenticate('local-register', 
+	app.post(PATH + 'register', passport.authenticate('local-register', 
 								   { failureFlash: true }), function (req, res) {
-		req.flash();
+		var foo = req.flash();
+		console.log('foo is ', foo);
 		console.log('in register');
 		createSendToken(req.user, res);
 	});
 	
 
-	app.post('/login', passport.authenticate('local-login'), function (req, res) {
+	app.post(PATH + 'login', passport.authenticate('local-login'), function (req, res) {
 		console.log('in login');
 		createSendToken(req.user, res);
 	});
@@ -41,10 +42,10 @@ module.exports = function(app){
 
 
 	var Wish = require('./controllers/wish');
-	app.post(PATH +'Wish', Wish.AddWish);
-	app.get(PATH +'Wish', Wish.findAll);
-	app.put(PATH +'Wish/:wishID', Wish.updateWish);
-	app.get(PATH +'Wish/:wishID', Wish.findWish);
+	app.post(PATH +'wish', Wish.AddWish);
+	app.get(PATH +'wish', Wish.findAll);
+	app.put(PATH +'wish/:wishID', Wish.updateWish);
+	app.get(PATH +'wish/:wishID', Wish.findWish);
 
 
 	var Charity = require('./controllers/charity');
