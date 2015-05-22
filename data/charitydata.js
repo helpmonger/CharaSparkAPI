@@ -10,7 +10,7 @@
 	    zipcode: "29201"
 	},
 	phone: "803-772-1555",
-	createdDate: Date.now, 
+	createdDate: "2015-05-16T18:25:43.511Z", 
 	category: "Social Welfare/Human Rights",
 	gps: [34.001809, -81.035330],
 	url: "http://so-sc.org/"
@@ -26,7 +26,7 @@
 	    zipcode: "29204"
 	},
 	phone: "866-275-7273",
-	createdDate: Date.now, 
+	createdDate: "2015-05-16T18:25:43.511Z", 
 	category: "Social Welfare/Human Rights",
 	gps: [34.018383, -80.987138],
 	url: "http://pandasc.org/"
@@ -42,7 +42,7 @@
 	    zipcode: "29201"
 	},
 	phone: "(803) 251-7869",
-	createdDate: Date.now, 
+	createdDate: "2015-05-16T18:25:43.511Z", 
 	category: "Objects & Donations",
 	gps: [34.007900, -81.044395],
 	url: "http://www.scnursesfoundation.org/"
@@ -58,7 +58,7 @@
 	    zipcode: "29201"
 	},
 	phone: "803.929.0088",
-	createdDate: Date.now, 
+	createdDate: "2015-05-16T18:25:43.511Z", 
 	category: "Objects & Donations",
 	gps: [33.999393, -81.039987],
 	url: "http://www.newmorningfoundation.org/"
@@ -74,7 +74,7 @@
 	    zipcode: "29204"
 	},
 	phone: "(803) 790-8208",
-	createdDate: Date.now, 
+	createdDate: "2015-05-16T18:25:43.511Z", 
 	category: "Health",
 	gps: [34.019686, -80.984895],
 	url: "http://www.stsm.org/"
@@ -90,7 +90,7 @@
 	    zipcode: "29203"
 	},
 	phone: "(803) 714-0266",
-	createdDate: Date.now, 
+	createdDate: "2015-05-16T18:25:43.511Z", 
 	category: "Health",
 	gps: [34.045962, -81.043736],
 	url: "http://www.ecchc.org/"
