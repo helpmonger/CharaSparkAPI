@@ -2,15 +2,22 @@ var mongoose = require('mongoose'),
 User = mongoose.model('User');
 
 exports.findAll = function(req, res){
-  User.find({},function(err, results) {
-    return res.send(results);
+	User.find({},function(err, results) {
+		if(err) {
+	      return res.status(500).send(err);
+	    }else{
+	      return res.status(200).send(results);
+	    }
   });
 };
 
 exports.add = function(req, res) {
-  User.create(req.body, function (err, musician) {
-    if (err) return console.log(err);
-    return res.send(musician);
+  User.create(req.body, function (err, data) {
+    if(err) {
+	      return res.status(500).send(err);
+    }else{
+      return res.status(201).send(data);
+    }
   });
 };
 
@@ -21,13 +28,11 @@ exports.test = function(req, res){
 
 exports.getProfile = function(req, res){
 	User.findOne({_id: req.params.userID}, function(err, data) {
-		if(err){
-			console.log('err is:', err);
-			return res.send(err);
-		}
-		else{
-			res.send(201, data);
-		}
+		if(err) {
+	      return res.status(500).send(err);
+	    }else{
+	      return res.status(200).send(data);
+	    }
 	});
 };
 
@@ -36,14 +41,11 @@ exports.updateProfile = function(req, res){
 	var update = req.body;
 	
 	User.findOneAndUpdate(query, update, function(err, data){
-		if(err){
-			console.log('err is:', err);
-			return res.send(err);
-		}
-		else{
-			console.log('updated');
-			return res.send(201, data);
-		}
+		if(err) {
+	      return res.status(500).send(err);
+	    }else{
+	      return res.status(201).send(data);
+	    }
 //		err = {};
 //		res.send(err);
 	});

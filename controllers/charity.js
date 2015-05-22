@@ -5,9 +5,9 @@ Charity = mongoose.model('Charity');
 exports.findAll = function(req, res){
   Charity.find({},function(err, results) {
     if(err) {
-      return res.send(500,err);
+      return res.status(500).send(err);
     }else{
-      return res.send(200,results);
+      return res.status(200).send(results);
     }
   });
 };
@@ -17,9 +17,9 @@ exports.add = function(req, res) {
   console.log(req.body);
   Charity.create(req.body, function (err, results) {
     if(err) {
-      return res.send(500,err);
+      return res.status(500).send(err);
     }else{
-      return res.send(200,results);
+      return res.status(200).send(results);
     }
   });
 }
@@ -29,9 +29,9 @@ exports.updateCharity = function(req, res){
   var updateObj = req.body; 
   Charity.findOneAndUpdate({_id:req.params.charityID},updateObj,function(err, results) {
     if(err) {
-      return res.send(500,err);
+      return res.status(500).send(err);
     }else{
-      return res.send(200,results);
+      return res.status(200).send(results);
     }
   });
 
@@ -41,9 +41,9 @@ exports.updateCharity = function(req, res){
 exports.findCharity = function(req, res){
   Charity.findOne({_id:req.params.charityID},function(err, results) {
     if(err){
-      return res.send(500,err);
+      return res.status(500).send(err);
     }else{
-      return res.send(200,results);
+      return res.status(200).send(results);
     }
   });
 };

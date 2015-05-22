@@ -4,9 +4,9 @@ Donation = mongoose.model('Donation');
 exports.addDonation = function(req, res) {
 	Donation.create(req.body, function(err, results) {
 		if(err) {
-	      return res.send(500,err);
+	      return res.status(500).send(err);
 	    }else{
-	      return res.send(200,results);
+	      return res.status(200).send(results);
 	    }
 	});
 }
@@ -14,9 +14,9 @@ exports.addDonation = function(req, res) {
 exports.findAll = function(req, res){
 	Donation.find({}, function(err, results) {
 		if(err) {
-	      return res.send(500,err);
+	      return res.status(500).send(err);
 	    }else{
-	      return res.send(200,results);
+	      return res.status(200).send(results);
 	    }
 	});
 }
@@ -26,9 +26,9 @@ exports.updateDonation = function(req, res){
 	var updateObj = req.body;
 	Donation.findOneAndUpdate({_id:req.params.donationID}, updateObj, function(err, results) {
 		if(err) {
-	      return res.send(500,err);
+	      return res.status(500).send(err);
 	    }else{
-	      return res.send(200,results);
+	      return res.status(200).send(results);
 	    }	
 });
 
@@ -37,9 +37,9 @@ exports.updateDonation = function(req, res){
 exports.findDonation = function(req, res){
   Donation.findOne({_id:req.params.donationID},function(err, results) {
     	if(err) {
-	      return res.send(500,err);
+	      return res.status(500).send(err);
 	    }else{
-	      return res.send(200,results);
+	      return res.status(200).send(results);
 	    }
   });
 };
@@ -53,8 +53,9 @@ exports.findDonationsFromUser = function(req, res){
 	  .exec(function(err, results) {
 	    if(err){
 	      console.log(err);
+	      return res.status(500).send(err);
 	    }else{
-	      return res.send(results);
+	      return res.status(200).send(results);
 	    }
   });
 }; 
