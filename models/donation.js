@@ -20,7 +20,7 @@
     },
     paidDate: {
       type: Date,
-      default: Date.now
+      default: null
     },
     createdDate: { 
       type: Date, 

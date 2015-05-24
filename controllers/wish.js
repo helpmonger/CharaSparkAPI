@@ -3,7 +3,10 @@ var Wish = mongoose.model('Wish');
 var crypUtil = require('../services/auth/cryptoUtil');
 
 exports.AddWish = function(req, res) {
-    if(crypUtil.validateToken(req)) {
+    var userID = crypUtil.validateToken(req);
+    if(userID) {
+      //sets the user that created the wish
+      req.body._wishMaker = userID;
       Wish.create(req.body, function (err, data) {
         if(err) {
           return res.status(500).send(err);

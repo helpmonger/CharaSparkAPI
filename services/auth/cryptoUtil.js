@@ -10,7 +10,7 @@ exports.validateToken = function(req){
 	var token = req.headers.authorization;
 	if(!token){
 		console.log('token null');
-		return false;
+		return null;
 	}
 	var token = token.split(' ')[1];
 	var payload = jwt.decode(token, "shhh..");
@@ -18,13 +18,13 @@ exports.validateToken = function(req){
 	if (!payload.sub || !payload.exp) {
 		console.log('null sub or exp');
 		console.log('token null');
-		return false;
+		return null;
 	}
 	else if(moment().isAfter(moment.unix(payload.exp))){
 		console.log('invalid timestamp');
 		console.log('exp is: ', payload.exp);
-		return false;
+		return null;
 	}
 
-	return true;
+	return payload.sub;
 }
