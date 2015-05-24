@@ -55,6 +55,7 @@ module.exports = function(app){
 	app.get(PATH +'donation/:donationID', Donation.findDonation);
 	
 	app.get(PATH +'donation/User/:userID', Donation.findDonationsFromUser);
+	app.get(PATH +'donation/charity/:charityID', Donation.findDonationsFromCharity);
 
 	var Charity = require('./controllers/charity');
 	app.post(PATH +'charity', Charity.add);
