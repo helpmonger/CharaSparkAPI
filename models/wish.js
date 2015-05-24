@@ -24,7 +24,7 @@
     },    
     wishStatus: {
       type: String,
-      required: true
+      default: 'new'      
     },
     createdDate: { 
       type: Date, 
@@ -38,5 +38,9 @@
       type: Date
     }
   });
+
+  WishSchema.methods.hasPaid = function (password, callback) {
+  bcrypt.compare(password, this.password, callback);
+}
 
   mongoose.model('Wish', WishSchema);
