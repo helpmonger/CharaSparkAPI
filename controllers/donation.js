@@ -80,7 +80,7 @@ exports.findDonationsFromCharity = function(req, res){
 	    		return data.amount;
 	    		});	
 	      console.log(total);
-	      return res.status(200).send({"totalDonation":total});
+	      return res.status(200).send({"listOfDonation":results,"totalDonation":total});
 	    }
  	  });
 	}else{
