@@ -23,8 +23,29 @@ exports.AddWish = function(req, res) {
 }
 
 exports.findAll = function(req, res){
+  console.log("req is: ", req);
 
-    Wish.find({},function(err, data) {
+  console.log('')
+  //declares a new date as 4/1/2015
+  var query = Wish.find({});
+  
+  //check for location information
+  var location = req.body.startingLoc;
+  var rad = req.body.radius;
+  var asOfDate = new Date(2015, 4, 1); 
+
+  if(req.body.asOfDate){
+    asOfDate = new Date(res.body.asOfDate);
+    console.log('as of date is: ', asOfDate);
+    query.where('createdDate').gt(asOfDate);
+  }
+
+  if(location && radius){
+      var area = { center: location, radius: rad, unique: true, spherical: true }
+      query.where('location').within().circle(area)
+  }
+
+    query.exec(function(err, data) {
         if(err) {
           return res.status(500).send(err);
         }else{
