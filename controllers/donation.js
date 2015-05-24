@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
 Donation = mongoose.model('Donation');
+var crypUtil = require('../services/auth/cryptoUtil');
 
 exports.addDonation = function(req, res) {
 	Donation.create(req.body, function(err, results) {
@@ -58,4 +59,28 @@ exports.findDonationsFromUser = function(req, res){
 	      return res.status(200).send(results);
 	    }
   });
+}; 
+
+//Find all donations from one charity
+exports.findDonationsFromCharity = function(req, res){
+	var userID = crypUtil.validateToken(req);
+	if(userID){
+	  Donation
+	  .find({_charity:req.params.charityID,paidDate:{$ne:null}})
+	  //the follwoing part not working yet
+	  //.aggregate()
+	  //.group({id:"$_charity",totalAmount:{$sum:"$amount"}})
+	  .exec(function(err, results) {
+	    if(err){
+	      console.log(err);
+	      return res.status(500).send(err);
+	    }else{
+	      return res.status(200).send(results);
+	    }
+ 	  });
+	}else{
+		res.status(401).send({
+			message:'You are not authorized'
+		});
+	}
 }; 
