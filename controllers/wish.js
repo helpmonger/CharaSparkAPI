@@ -72,3 +72,23 @@ exports.findWishesFromUser = function(req, res){
         }
 	  });
 	}
+
+// Find all wishes from one fulfiller
+exports.findWishesFromFulfiller = function(req, res){
+  var fflID = crypUtil.validateToken(req);
+  var fflID2 = req.params.fulfillerID;
+  if(fflID){ //&& fflID==fflID2){  
+    Wish.find({fulfiller: req.params.fulfillerID})
+    .exec(function(err, data) {
+      if(err) {
+          return res.status(500).send(err);
+        }else{
+          return res.status(201).send(data);
+        }
+    });
+  }else{
+    res.status(401).send({
+      message:'You are not authorized'
+    });
+  }
+}
