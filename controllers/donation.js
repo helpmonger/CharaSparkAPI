@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
 Donation = mongoose.model('Donation');
 var crypUtil = require('../services/auth/cryptoUtil');
+var lodash = require('lodash');
 
 exports.addDonation = function(req, res) {
 	Donation.create(req.body, function(err, results) {
@@ -75,7 +76,11 @@ exports.findDonationsFromCharity = function(req, res){
 	      console.log(err);
 	      return res.status(500).send(err);
 	    }else{
-	      return res.status(200).send(results);
+	      var total = lodash.sum(results,function(data){
+	    		return data.amount;
+	    		});	
+	      console.log(total);
+	      return res.status(200).send({"totalDonation":total});
 	    }
  	  });
 	}else{
