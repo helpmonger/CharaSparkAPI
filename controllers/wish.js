@@ -115,9 +115,13 @@ exports.findWishesFromFulfiller = function(req, res){
         }else{
           return res.status(201).send(data);
         }
-<<<<<<< HEAD
 	  });
-	}
+  }else{
+    res.status(401).send({
+      message:'You are not authorized'
+    });
+  }
+}
 
 // Find all paid wishes
 exports.findPaidWishes = function(req, res){
@@ -136,12 +140,3 @@ exports.findPaidWishes = function(req, res){
   });
   }
 }
-=======
-    });
-  }else{
-    res.status(401).send({
-      message:'You are not authorized'
-    });
-  }
-}
->>>>>>> e8a4a4a801fe8c428e70d23e5dc73249a997ec5a
