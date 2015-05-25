@@ -82,16 +82,24 @@ exports.findWish = function(req, res){
 
 // Find all wishes from one user
 exports.findWishesFromUser = function(req, res){
-	  Wish.find({_wishMaker: req.params.userID})
-	  .populate('_wishMaker', 'user_name')
-//	  .populate('_charity', 'name')
-	  .exec(function(err, data) {
-	    if(err) {
-          return res.status(500).send(err);
-        }else{
-          return res.status(201).send(data);
-        }
-	  });
+  var userID = crypUtil.validateToken(req);
+    if(userID) {
+  	  Wish.find({_wishMaker: req.params.userID})
+  	  .populate('_wishMaker', 'user_name')
+  //	  .populate('_charity', 'name')
+  	  .exec(function(err, data) {
+  	    if(err) {
+            return res.status(500).send(err);
+          }else{
+            return res.status(201).send(data);
+          }
+  	  });
+    }
+     else {
+        res.status(401).send({
+            message: 'You are not authorized'
+        });
+    }
 	}
 
 // Find all wishes from one fulfiller
