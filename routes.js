@@ -46,7 +46,7 @@ module.exports = function(app){
 	app.get(PATH +'wish', Wish.findAll);
 	app.put(PATH +'wish/:wishID', Wish.updateWish);
 	app.get(PATH +'wish/:wishID', Wish.findWish);	
-	app.get(PATH +'wish/User/:userID', Wish.findWishesFromUser);
+	app.get(PATH +'wish/user/:userID', Wish.findWishesFromUser);
 	app.get(PATH +'wish/fulfiller/:fulfillerID', Wish.findWishesFromFulfiller);
 
     var Donation = require('./controllers/donation');
@@ -55,7 +55,7 @@ module.exports = function(app){
 	app.put(PATH +'donation/:donationID', Donation.updateDonation);
 	app.get(PATH +'donation/:donationID', Donation.findDonation);
 	
-	app.get(PATH +'donation/User/:userID', Donation.findDonationsFromUser);
+	app.get(PATH +'donation/user/:userID', Donation.findDonationsFromUser);
 	app.get(PATH +'donation/charity/:charityID', Donation.findDonationsFromCharity);
 
 	var Charity = require('./controllers/charity');

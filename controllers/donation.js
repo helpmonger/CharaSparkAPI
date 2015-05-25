@@ -57,7 +57,11 @@ exports.findDonationsFromUser = function(req, res){
 	      console.log(err);
 	      return res.status(500).send(err);
 	    }else{
-	      return res.status(200).send(results);
+	    	var total = lodash.sum(results,function(data){
+	    		return data.amount;
+	    		});	
+	      //console.log(total);
+	      return res.status(200).send({"listOfDonation":results,"totalDonation":total});
 	    }
   });
 }; 
