@@ -47,7 +47,11 @@ module.exports = function(app){
 	app.put(PATH +'wish/:wishID', Wish.updateWish);
 	app.get(PATH +'wish/:wishID', Wish.findWish);	
 	app.get(PATH +'wish/User/:userID', Wish.findWishesFromUser);
+<<<<<<< HEAD
 	app.get(PATH +'wish/PaidWishes', Wish.findPaidWishes);
+=======
+	app.get(PATH +'wish/fulfiller/:fulfillerID', Wish.findWishesFromFulfiller);
+>>>>>>> e8a4a4a801fe8c428e70d23e5dc73249a997ec5a
 
     var Donation = require('./controllers/donation');
 	app.post(PATH +'donation', Donation.addDonation);

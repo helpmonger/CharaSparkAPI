@@ -79,7 +79,7 @@ exports.findDonationsFromCharity = function(req, res){
 	      var total = lodash.sum(results,function(data){
 	    		return data.amount;
 	    		});	
-	      console.log(total);
+	      //console.log(total);
 	      return res.status(200).send({"listOfDonation":results,"totalDonation":total});
 	    }
  	  });
