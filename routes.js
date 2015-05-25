@@ -58,6 +58,8 @@ module.exports = function(app){
 	
 	app.get(PATH +'donation/User/:userID', Donation.findDonationsFromUser);
 	app.get(PATH +'donation/charity/:charityID', Donation.findDonationsFromCharity);
+	app.get(PATH +'donation/wish/:wishID', Donation.findDonationForWish);
+
 
 	var Charity = require('./controllers/charity');
 	app.post(PATH +'charity', Charity.add);
@@ -68,19 +70,12 @@ module.exports = function(app){
 	// console.log('done with routes'); 
 
 	var User = require('./controllers/user');
-	app.get(PATH +'Test', User.test);
-	
-	// get user object by userName
-//	app.get(PATH + 'user/:userName', User.getProfile);
-	
-	// get user object by UserID
-	app.get(PATH + 'user/:userID', User.getProfile);
-	
-	// update a user by UserID 
-	app.put(PATH + 'user/:userID', User.updateProfile);
-	
 	// get all users
 	app.get(PATH + 'user', User.findAll);
+	// get user object by UserID
+	app.get(PATH + 'user/:userID', User.getProfile);
+	// update a user by UserID 
+	app.put(PATH + 'user/:userID', User.updateProfile);
 
 	//test
 	app.get('/flash', function(req, res){
