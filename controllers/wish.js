@@ -115,6 +115,28 @@ exports.findWishesFromFulfiller = function(req, res){
         }else{
           return res.status(201).send(data);
         }
+<<<<<<< HEAD
+	  });
+	}
+
+// Find all paid wishes
+exports.findPaidWishes = function(req, res){
+  var userID = crypUtil.validateToken(req);
+  console.log(userID);
+  if(userID){
+    Donation.find({paidDate:{$ne:null}})
+    .populate(_wish)
+        .exec(function(err, results) {
+      if(err){
+        console.log(err);
+        return res.status(500).send(err);
+      }else{
+        return res.status(200).send(results);
+  }
+  });
+  }
+}
+=======
     });
   }else{
     res.status(401).send({
@@ -122,3 +144,4 @@ exports.findWishesFromFulfiller = function(req, res){
     });
   }
 }
+>>>>>>> e8a4a4a801fe8c428e70d23e5dc73249a997ec5a
