@@ -72,3 +72,21 @@ exports.findWishesFromUser = function(req, res){
         }
 	  });
 	}
+
+// Find all paid wishes
+exports.findPaidWishes = function(req, res){
+  var userID = crypUtil.validateToken(req);
+  console.log(userID);
+  if(userID){
+    Donation.find({paidDate:{$ne:null}})
+    .populate(_wish)
+        .exec(function(err, results) {
+      if(err){
+        console.log(err);
+        return res.status(500).send(err);
+      }else{
+        return res.status(200).send(results);
+  }
+  });
+  }
+}
