@@ -1,21 +1,20 @@
 var mongoose = require('mongoose'),
 User = mongoose.model('User');
+var utility = require('../data/Utility');
 
 exports.findAll = function(req, res){
  	var userID = crypUtil.validateToken(req);
     if(userID) {
 		User.find({},function(err, results) {
 			if(err) {
-		      return res.status(500).send(err);
+		      return utility.handleError(res);
 		    }else{
-		      return res.status(200).send(results);
+		      return res.send(results);
 		    }
 	  });
 	}
 	else {
-        res.status(401).send({
-            message: 'You are not authorized'
-        });
+        return utiity.handleAuthFailure(res);
     }
 }
 
@@ -31,16 +30,14 @@ exports.getProfile = function(req, res){
     if(userID && userID == userID2) {
 		User.findOne({_id: req.params.userID}, function(err, data) {
 			if(err) {
-		      return res.status(500).send(err);
+		      return utility.handleError(res);
 		    }else{
-		      return res.status(200).send(data);
+		      return res.send(data);
 		    }
 		});
 	}
 	else {
-        res.status(401).send({
-            message: 'You are not authorized'
-        });
+        return utiity.handleAuthFailure(res);
     }
 
 };
@@ -55,16 +52,14 @@ exports.updateProfile = function(req, res){
     if(userID && userID == userID2) {
 		User.findOneAndUpdate(query, update, function(err, data){
 			if(err) {
-		      return res.status(500).send(err);
+		      return utility.handleError(res);
 		    }else{
-		      return res.status(201).send(data);
+		      return res.send(data);
 		    }
 		});
 	}
 	else {
-        res.status(401).send({
-            message: 'You are not authorized'
-        });
+        return utiity.handleAuthFailure(res);
     }
 };
 
