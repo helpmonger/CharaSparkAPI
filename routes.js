@@ -43,11 +43,11 @@ module.exports = function(app){
 
 	var Wish = require('./controllers/wish');
 	app.post(PATH +'wish', Wish.AddWish);
-	app.post(PATH +'wish', Wish.findAll);
+	app.get(PATH +'wish/PaidWishes', Wish.findPaidWishes);
+	app.post(PATH +'wish/LocalWishes', Wish.findAll);
 	app.put(PATH +'wish/:wishID', Wish.updateWish);
 	app.get(PATH +'wish/:wishID', Wish.findWish);	
 	app.get(PATH +'wish/User/:userID', Wish.findWishesFromUser);
-	app.get(PATH +'wish/PaidWishes', Wish.findPaidWishes);
 	app.get(PATH +'wish/fulfiller/:fulfillerID', Wish.findWishesFromFulfiller);
 
     var Donation = require('./controllers/donation');
@@ -72,6 +72,10 @@ module.exports = function(app){
 	var User = require('./controllers/user');
 	// get all users
 	app.get(PATH + 'user', User.findAll);
+
+	//this will take the access token and return the userID. 
+	//meant for testing only
+	app.get(PATH + 'user/auth', User.getUserID);
 	// get user object by UserID
 	app.get(PATH + 'user/:userID', User.getProfile);
 	// update a user by UserID 

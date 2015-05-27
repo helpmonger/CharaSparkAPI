@@ -16,7 +16,7 @@ exports.addDonation = function(req, res) {
 		    }
 		});
 	}else{
-		return utiity.handleAuthFailure(res);
+		return utility.handleAuthFailure(res);
 	}
 
 }
@@ -44,7 +44,7 @@ exports.updateDonation = function(req, res){
 		    }	
 		});
 	}else{
-		return utiity.handleAuthFailure(res);
+		return utility.handleAuthFailure(res);
 	}
 }
 
@@ -61,7 +61,7 @@ exports.findDonation = function(req, res){
 	  });
 	 
 	}else{
-		return utiity.handleAuthFailure(res);
+		return utility.handleAuthFailure(res);
 	}
 }
 
@@ -84,7 +84,7 @@ exports.findDonationsFromUser = function(req, res){
   		});
 	 
 	}else{
-		return utiity.handleAuthFailure(res);
+		return utility.handleAuthFailure(res);
 	}
 }
 
@@ -105,7 +105,7 @@ exports.findDonationForWish = function(req, res){
 	    }
  	  });
 	}else{
-		return utiity.handleAuthFailure(res);
+		return utility.handleAuthFailure(res);
 	}
 }
 
@@ -128,6 +128,6 @@ exports.findDonationsFromCharity = function(req, res){
 	    }
  	  });
 	}else{
-		return utiity.handleAuthFailure(res);
+		return utility.handleAuthFailure(res);
 	}
 }

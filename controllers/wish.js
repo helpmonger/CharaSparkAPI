@@ -6,52 +6,61 @@ var utility = require('../data/Utility');
 exports.AddWish = function(req, res) {
     var userID = crypUtil.validateToken(req);
     if(userID) {
+      console.log('before adding: ', userID);
       //sets the user that created the wish
       req.body._wishMaker = userID;
+      console.log('after adding: ', req.body._wishMaker);
       Wish.create(req.body, function (err, data) {
         if(err) {
-          return utility.handleError(res);;
+          return utility.handleError(res, err);;
         }else{
           return res.send(data);
         }
       });
     }
     else {
-        return utiity.handleAuthFailure(res);
+        return utility.handleAuthFailure(res);
     }
 }
 
 exports.findAll = function(req, res){
-  console.log("req is: ", req);
+  var userID = crypUtil.validateToken(req);
+  if(userID) {
+    console.log('the user id is: ', userID);
+    //gets all wishes not are not from the current user
+    var query = Wish.find({_wishMaker: {'$ne': userID}});
 
-  console.log('')
-  //declares a new date as 4/1/2015
-  var query = Wish.find({});
-  
-  //check for location information
-  var location = req.body.startingLoc;
-  var rad = req.body.radius;
-  var asOfDate = new Date(2015, 4, 1); 
+    //gets location information from body
+    var location = req.body.startingLoc;
+    var rad = req.body.radius;
+    //use 4/1/2015 as default date
+    var asOfDate = new Date(2015, 4, 1); 
 
-  if(req.body.asOfDate){
-    asOfDate = new Date(res.body.asOfDate);
-    console.log('as of date is: ', asOfDate);
-    query.where('createdDate').gt(asOfDate);
+    if(req.body.asOfDate){
+      asOfDate = new Date(req.body.asOfDate);
+      console.log('as of date is: ', asOfDate);
+      query.where('createdDate').gt(asOfDate);
+    }
+
+    //if the location is set, find all wishes that are within (rad) miles within (location)
+    if(location && rad){
+        var area = { center: location, radius: rad, unique: true, spherical: true }
+        query.where('location').within().circle(area)
+    }
+
+      query.exec(function(err, data) {
+          if(err) {
+            return utility.handleError(res, err);;
+          }else{
+            return res.send(data);
+          }
+      });
+  }
+  else {
+      return utility.handleAuthFailure(res);
   }
 
-  if(location && radius){
-      var area = { center: location, radius: rad, unique: true, spherical: true }
-      query.where('location').within().circle(area)
-  }
-
-    query.exec(function(err, data) {
-        if(err) {
-          return utility.handleError(res);;
-        }else{
-          return res.send(data);
-        }
-    });
-};
+}
 
 
 //Updates wish, PUT
@@ -59,7 +68,7 @@ exports.updateWish = function(req, res){
     var updateObj = req.body; 
     Wish.findOneAndUpdate({_id:req.params.wishID},updateObj,function(err, data) {
         if(err) {
-          return utility.handleError(res);;
+          return utility.handleError(res, err);;
         } else{
           return res.send(data);
         }
@@ -71,7 +80,7 @@ exports.updateWish = function(req, res){
 exports.findWish = function(req, res){
     Wish.findOne({_id:req.params.wishID},function(err, data) {
         if(err) {
-          return utility.handleError(res);;
+          return utility.handleError(res, err);;
         }else{
           return res.send(data);
         }
@@ -88,14 +97,14 @@ exports.findWishesFromUser = function(req, res){
   //	  .populate('_charity', 'name')
   	  .exec(function(err, data) {
   	    if(err) {
-            return utility.handleError(res);;
+            return utility.handleError(res, err);;
           }else{
             return res.send(data);
           }
   	  });
     }
      else {
-        return utiity.handleAuthFailure(res);
+        return utility.handleAuthFailure(res);
     }
 	}
 
@@ -108,7 +117,7 @@ exports.findWishesFromFulfiller = function(req, res){
     Wish.find({_fulfiller: fflID})
     .exec(function(err, data) {
       if(err) {
-          return utility.handleError(res);;
+          return utility.handleError(res, err);;
         }else{
           return res.send(data);
         }
@@ -130,7 +139,7 @@ exports.findPaidWishes = function(req, res){
         .exec(function(err, results) {
       if(err){
         console.log(err);
-        return utility.handleError(res);;
+        return utility.handleError(res, err);;
       }else{
         return res.send(results);
   }

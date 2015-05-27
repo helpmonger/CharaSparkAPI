@@ -27,7 +27,7 @@ exports.add = function(req, res) {
     });
   }
   else {
-    return utiity.handleAuthFailure(res);
+    return utility.handleAuthFailure(res);
   }
 
 }
@@ -46,7 +46,7 @@ exports.updateCharity = function(req, res){
       });
   }
   else {
-    return utiity.handleAuthFailure(res);
+    return utility.handleAuthFailure(res);
   }
 
 };
@@ -64,7 +64,7 @@ exports.findCharity = function(req, res){
     });
   }
   else {
-    return utiity.handleAuthFailure(res);
+    return utility.handleAuthFailure(res);
   }
 
 };

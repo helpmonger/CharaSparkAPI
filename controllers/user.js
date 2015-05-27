@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
 User = mongoose.model('User');
 var utility = require('../data/Utility');
+var crypUtil = require('../services/auth/cryptoUtil');
 
 exports.findAll = function(req, res){
  	var userID = crypUtil.validateToken(req);
@@ -14,10 +15,19 @@ exports.findAll = function(req, res){
 	  });
 	}
 	else {
-        return utiity.handleAuthFailure(res);
+        return utility.handleAuthFailure(res);
     }
 }
 
+exports.getUserID = function(req, res){
+	var userID = crypUtil.validateToken(req);
+    if(userID) {
+		return res.send({_id: userID});
+	}
+	else {
+        return utility.handleAuthFailure(res);
+    }
+}
 
 exports.test = function(req, res){
 	console.log('foo');
@@ -37,7 +47,7 @@ exports.getProfile = function(req, res){
 		});
 	}
 	else {
-        return utiity.handleAuthFailure(res);
+        return utility.handleAuthFailure(res);
     }
 
 };
@@ -59,7 +69,7 @@ exports.updateProfile = function(req, res){
 		});
 	}
 	else {
-        return utiity.handleAuthFailure(res);
+        return utility.handleAuthFailure(res);
     }
 };
 
