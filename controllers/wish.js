@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Wish = mongoose.model('Wish');
 var crypUtil = require('../services/auth/cryptoUtil');
+var utility = require('../data/Utility');
 
 exports.AddWish = function(req, res) {
     var userID = crypUtil.validateToken(req);
@@ -9,16 +10,14 @@ exports.AddWish = function(req, res) {
       req.body._wishMaker = userID;
       Wish.create(req.body, function (err, data) {
         if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res);;
         }else{
-          return res.status(200).send(data);
+          return res.send(data);
         }
       });
     }
     else {
-        res.status(401).send({
-            message: 'You are not authorized'
-        });
+        return utiity.handleAuthFailure(res);
     }
 }
 
@@ -47,9 +46,9 @@ exports.findAll = function(req, res){
 
     query.exec(function(err, data) {
         if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res);;
         }else{
-          return res.status(200).send(data);
+          return res.send(data);
         }
     });
 };
@@ -60,9 +59,9 @@ exports.updateWish = function(req, res){
     var updateObj = req.body; 
     Wish.findOneAndUpdate({_id:req.params.wishID},updateObj,function(err, data) {
         if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res);;
         } else{
-          return res.status(201).send(data);
+          return res.send(data);
         }
     });
 
@@ -72,9 +71,9 @@ exports.updateWish = function(req, res){
 exports.findWish = function(req, res){
     Wish.findOne({_id:req.params.wishID},function(err, data) {
         if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res);;
         }else{
-          return res.status(201).send(data);
+          return res.send(data);
         }
     });
 };
@@ -89,16 +88,14 @@ exports.findWishesFromUser = function(req, res){
   //	  .populate('_charity', 'name')
   	  .exec(function(err, data) {
   	    if(err) {
-            return res.status(500).send(err);
+            return utility.handleError(res);;
           }else{
-            return res.status(201).send(data);
+            return res.send(data);
           }
   	  });
     }
      else {
-        res.status(401).send({
-            message: 'You are not authorized'
-        });
+        return utiity.handleAuthFailure(res);
     }
 	}
 
@@ -111,9 +108,9 @@ exports.findWishesFromFulfiller = function(req, res){
     Wish.find({_fulfiller: fflID})
     .exec(function(err, data) {
       if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res);;
         }else{
-          return res.status(201).send(data);
+          return res.send(data);
         }
 	  });
   }else{
@@ -133,9 +130,9 @@ exports.findPaidWishes = function(req, res){
         .exec(function(err, results) {
       if(err){
         console.log(err);
-        return res.status(500).send(err);
+        return utility.handleError(res);;
       }else{
-        return res.status(200).send(results);
+        return res.send(results);
   }
   });
   }

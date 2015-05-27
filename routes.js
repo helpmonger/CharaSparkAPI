@@ -43,7 +43,7 @@ module.exports = function(app){
 
 	var Wish = require('./controllers/wish');
 	app.post(PATH +'wish', Wish.AddWish);
-	app.get(PATH +'wish', Wish.findAll);
+	app.post(PATH +'wish', Wish.findAll);
 	app.put(PATH +'wish/:wishID', Wish.updateWish);
 	app.get(PATH +'wish/:wishID', Wish.findWish);	
 	app.get(PATH +'wish/User/:userID', Wish.findWishesFromUser);
