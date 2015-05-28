@@ -78,7 +78,11 @@ exports.updateWish = function(req, res){
 
 //Gets a specific wish, GET
 exports.findWish = function(req, res){
-    Wish.findOne({_id:req.params.wishID},function(err, data) {
+    Wish.findOne({_id:req.params.wishID})
+    .populate('_charity')
+    .populate('_donation')
+    .populate('_wishMaker', 'user_name')
+    .exec(function(err, data) {
         if(err) {
           return utility.handleError(res, err);;
         }else{

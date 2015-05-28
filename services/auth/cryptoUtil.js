@@ -13,7 +13,6 @@ exports.validateToken = function(req){
 		return null;
 	}
 	var token = token.split(' ')[1];
-	console.log('token is: ', token);
 	var payload = jwt.decode(token, "shhh..");
 
 	if (!payload.sub || !payload.exp) {

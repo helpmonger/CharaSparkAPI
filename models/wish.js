@@ -14,6 +14,10 @@
       type: Schema.Types.ObjectId, 
       ref: 'Charity' 
     },
+     _donation: {
+      type: Schema.Types.ObjectId, 
+      ref: 'Donation' 
+    },
     title: {
       type: String,
       required: true
