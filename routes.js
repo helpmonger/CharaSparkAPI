@@ -43,6 +43,7 @@ module.exports = function(app){
 
 	var Wish = require('./controllers/wish');
 	app.post(PATH +'wish', Wish.AddWish);
+	app.get(PATH +'wish/fulfiller/:fulfillerID', Wish.findWishesFromFulfiller);
 	app.get(PATH +'wish', Wish.findAll);
 	app.get(PATH +'wish/PaidWishes', Wish.findPaidWishes);
 	app.put(PATH +'wish/:wishID', Wish.updateWish);
@@ -50,7 +51,6 @@ module.exports = function(app){
 
 	app.get(PATH +'wish/user/:userID', Wish.findWishesFromUser);
 	app.get(PATH +'wish/PaidWishes', Wish.findPaidWishes);
-	app.get(PATH +'wish/fulfiller/:fulfillerID', Wish.findWishesFromFulfiller);
 
 
     var Donation = require('./controllers/donation');

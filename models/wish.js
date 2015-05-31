@@ -28,7 +28,7 @@
     },    
     wishStatus: {
       type: String,
-      default: 'new'      
+      default: 'new'      //other statuses are: pending (accepted by fulfiller, pending wish maker approval) , proceeding, completed, cancelled (cancelled by wishmaker), aborted (cancelled by fulfiller)
     },
     createdDate: { 
       type: Date, 
