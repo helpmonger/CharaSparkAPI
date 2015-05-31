@@ -43,11 +43,15 @@ module.exports = function(app){
 
 	var Wish = require('./controllers/wish');
 	app.post(PATH +'wish', Wish.AddWish);
-	app.get(PATH +'wish', Wish.findAll);
+	app.get(PATH +'wish/PaidWishes', Wish.findPaidWishes);
+	app.post(PATH +'wish/LocalWishes', Wish.findAll);
 	app.put(PATH +'wish/:wishID', Wish.updateWish);
 	app.get(PATH +'wish/:wishID', Wish.findWish);	
+
 	app.get(PATH +'wish/user/:userID', Wish.findWishesFromUser);
 	app.get(PATH +'wish/PaidWishes', Wish.findPaidWishes);
+	app.get(PATH +'wish/fulfiller/:fulfillerID', Wish.findWishesFromFulfiller);
+
 
     var Donation = require('./controllers/donation');
 	app.post(PATH +'donation', Donation.addDonation);
@@ -57,6 +61,8 @@ module.exports = function(app){
 	
 	app.get(PATH +'donation/user/:userID', Donation.findDonationsFromUser);
 	app.get(PATH +'donation/charity/:charityID', Donation.findDonationsFromCharity);
+	app.get(PATH +'donation/wish/:wishID', Donation.findDonationForWish);
+
 
 	var Charity = require('./controllers/charity');
 	app.post(PATH +'charity', Charity.add);
@@ -67,19 +73,16 @@ module.exports = function(app){
 	// console.log('done with routes'); 
 
 	var User = require('./controllers/user');
-	app.get(PATH +'Test', User.test);
-	
-	// get user object by userName
-//	app.get(PATH + 'user/:userName', User.getProfile);
-	
-	// get user object by UserID
-	app.get(PATH + 'user/:userID', User.getProfile);
-	
-	// update a user by UserID 
-	app.put(PATH + 'user/:userID', User.updateProfile);
-	
 	// get all users
 	app.get(PATH + 'user', User.findAll);
+
+	//this will take the access token and return the userID. 
+	//meant for testing only
+	app.get(PATH + 'user/auth', User.getUserID);
+	// get user object by UserID
+	app.get(PATH + 'user/:userID', User.getProfile);
+	// update a user by UserID 
+	app.put(PATH + 'user/:userID', User.updateProfile);
 
 	//test
 	app.get('/flash', function(req, res){

@@ -1,58 +1,66 @@
 var mongoose = require('mongoose');
 var Wish = mongoose.model('Wish');
 var crypUtil = require('../services/auth/cryptoUtil');
+var utility = require('../data/Utility');
 
 exports.AddWish = function(req, res) {
     var userID = crypUtil.validateToken(req);
     if(userID) {
+      console.log('before adding: ', userID);
       //sets the user that created the wish
       req.body._wishMaker = userID;
+      console.log('after adding: ', req.body._wishMaker);
       Wish.create(req.body, function (err, data) {
         if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res, err);;
         }else{
-          return res.status(200).send(data);
+          return res.send(data);
         }
       });
     }
     else {
-        res.status(401).send({
-            message: 'You are not authorized'
-        });
+        return utility.handleAuthFailure(res);
     }
 }
 
 exports.findAll = function(req, res){
-  console.log("req is: ", req);
+  var userID = crypUtil.validateToken(req);
+  if(userID) {
+    console.log('the user id is: ', userID);
+    //gets all wishes not are not from the current user
+    var query = Wish.find({_wishMaker: {'$ne': userID}});
 
-  console.log('')
-  //declares a new date as 4/1/2015
-  var query = Wish.find({});
-  
-  //check for location information
-  var location = req.body.startingLoc;
-  var rad = req.body.radius;
-  var asOfDate = new Date(2015, 4, 1); 
+    //gets location information from body
+    var location = req.body.startingLoc;
+    var rad = req.body.radius;
+    //use 4/1/2015 as default date
+    var asOfDate = new Date(2015, 4, 1); 
 
-  if(req.body.asOfDate){
-    asOfDate = new Date(res.body.asOfDate);
-    console.log('as of date is: ', asOfDate);
-    query.where('createdDate').gt(asOfDate);
+    if(req.body.asOfDate){
+      asOfDate = new Date(req.body.asOfDate);
+      console.log('as of date is: ', asOfDate);
+      query.where('createdDate').gt(asOfDate);
+    }
+
+    //if the location is set, find all wishes that are within (rad) miles within (location)
+    if(location && rad){
+        var area = { center: location, radius: rad, unique: true, spherical: true }
+        query.where('location').within().circle(area)
+    }
+
+      query.exec(function(err, data) {
+          if(err) {
+            return utility.handleError(res, err);;
+          }else{
+            return res.send(data);
+          }
+      });
+  }
+  else {
+      return utility.handleAuthFailure(res);
   }
 
-  if(location && radius){
-      var area = { center: location, radius: rad, unique: true, spherical: true }
-      query.where('location').within().circle(area)
-  }
-
-    query.exec(function(err, data) {
-        if(err) {
-          return res.status(500).send(err);
-        }else{
-          return res.status(200).send(data);
-        }
-    });
-};
+}
 
 
 //Updates wish, PUT
@@ -60,9 +68,9 @@ exports.updateWish = function(req, res){
     var updateObj = req.body; 
     Wish.findOneAndUpdate({_id:req.params.wishID},updateObj,function(err, data) {
         if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res, err);;
         } else{
-          return res.status(201).send(data);
+          return res.send(data);
         }
     });
 
@@ -70,11 +78,15 @@ exports.updateWish = function(req, res){
 
 //Gets a specific wish, GET
 exports.findWish = function(req, res){
-    Wish.findOne({_id:req.params.wishID},function(err, data) {
+    Wish.findOne({_id:req.params.wishID})
+    .populate('_charity')
+    .populate('_donation')
+    .populate('_wishMaker', 'user_name')
+    .exec(function(err, data) {
         if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res, err);;
         }else{
-          return res.status(201).send(data);
+          return res.send(data);
         }
     });
 };
@@ -89,16 +101,14 @@ exports.findWishesFromUser = function(req, res){
   //	  .populate('_charity', 'name')
   	  .exec(function(err, data) {
   	    if(err) {
-            return res.status(500).send(err);
+            return utility.handleError(res, err);;
           }else{
-            return res.status(201).send(data);
+            return res.send(data);
           }
   	  });
     }
      else {
-        res.status(401).send({
-            message: 'You are not authorized'
-        });
+        return utility.handleAuthFailure(res);
     }
 	}
 
@@ -106,18 +116,22 @@ exports.findWishesFromUser = function(req, res){
 exports.findWishesFromFulfiller = function(req, res){
   var fflID = crypUtil.validateToken(req);
   var fflID2 = req.params.fulfillerID;
-  if(fflID){ //&& fflID==fflID2){  
+  if(fflID && fflID==fflID2){  
     console.log(fflID);
-    Wish.find({})//({_fulfiller: fflID})
+    Wish.find({_fulfiller: fflID})
     .exec(function(err, data) {
       if(err) {
-          return res.status(500).send(err);
+          return utility.handleError(res, err);;
         }else{
-          return res.status(201).send(data);
+          return res.send(data);
         }
-<<<<<<< HEAD
 	  });
-	}
+  }else{
+    res.status(401).send({
+      message:'You are not authorized'
+    });
+  }
+}
 
 // Find all paid wishes
 exports.findPaidWishes = function(req, res){
@@ -129,19 +143,11 @@ exports.findPaidWishes = function(req, res){
         .exec(function(err, results) {
       if(err){
         console.log(err);
-        return res.status(500).send(err);
+        return utility.handleError(res, err);;
       }else{
-        return res.status(200).send(results);
+        return res.send(results);
   }
   });
   }
 }
-=======
-    });
-  }else{
-    res.status(401).send({
-      message:'You are not authorized'
-    });
-  }
-}
->>>>>>> e8a4a4a801fe8c428e70d23e5dc73249a997ec5a
+
