@@ -31,12 +31,12 @@ exports.findAll = function(req, res){
     var query = Wish.find({_wishMaker: {'$ne': userID}});
 
     //gets location information from body
-    var location = req.body.startingLoc;
-    var rad = req.body.radius;
+    var location = req.params.startingLoc;
+    var rad = req.params.radius;
     //use 4/1/2015 as default date
     var asOfDate = new Date(2015, 4, 1); 
 
-    if(req.body.asOfDate){
+    if(req.params.asOfDate){
       asOfDate = new Date(req.body.asOfDate);
       console.log('as of date is: ', asOfDate);
       query.where('createdDate').gt(asOfDate);
