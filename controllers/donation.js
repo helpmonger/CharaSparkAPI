@@ -71,7 +71,7 @@ exports.findDonationsFromUser = function(req, res){
   var userID = crypUtil.validateToken(req);
 	if(userID){
 	  Donation
-	  .find({_donor: req.params.userID})
+	  .find({_donor: req.params.wishID})
 	  .populate('_donor', 'user_name')
 //	  .populate('_charity', 'name')
 	  .exec(function(err, results) {
