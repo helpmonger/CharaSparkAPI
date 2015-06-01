@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Wish = mongoose.model('Wish');
 var Donation = mongoose.model('Donation');
 var crypUtil = require('../services/auth/cryptoUtil');
+var lodash = require('lodash');
 var utility = require('../data/Utility');
 
 exports.AddWish = function(req, res) {
@@ -32,12 +33,12 @@ exports.findAll = function(req, res){
     var query = Wish.find({_wishMaker: {'$ne': userID}});
 
     //gets location information from body
-    var location = req.body.startingLoc;
-    var rad = req.body.radius;
+    var location = req.params.startingLoc;
+    var rad = req.params.radius;
     //use 4/1/2015 as default date
     var asOfDate = new Date(2015, 4, 1); 
 
-    if(req.body.asOfDate){
+    if(req.params.asOfDate){
       asOfDate = new Date(req.body.asOfDate);
       console.log('as of date is: ', asOfDate);
       query.where('createdDate').gt(asOfDate);
@@ -48,12 +49,20 @@ exports.findAll = function(req, res){
         var area = { center: location, radius: rad, unique: true, spherical: true }
         query.where('location').within().circle(area)
     }
+    
+    query.populate('_donation');
 
       query.exec(function(err, data) {
           if(err) {
             return utility.handleError(res, err);;
           }else{
-            return res.send(data);
+            //now we find all the wishes that are paid (have _donation.paidDate != null) 
+            console.log('before filter: ', data);
+            var result = lodash.filter(data._donation, function(item){
+              return item.paidDate;
+            });
+            console.log('after filter: ', result);
+            return res.send(result);
           }
       });
   }
@@ -99,7 +108,8 @@ exports.findWishesFromUser = function(req, res){
     if(userID) {
   	  Wish.find({_wishMaker: req.params.userID})
   	  .populate('_wishMaker', 'user_name')
-  //	  .populate('_charity', 'name')
+  	  .populate('_charity', 'name')
+      .populate('_donation', 'amount')
   	  .exec(function(err, data) {
   	    if(err) {
             return utility.handleError(res, err);;
