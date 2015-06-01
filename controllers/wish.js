@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Wish = mongoose.model('Wish');
+var Donation = mongoose.model('Donation');
 var crypUtil = require('../services/auth/cryptoUtil');
 var utility = require('../data/Utility');
 
@@ -139,7 +140,7 @@ exports.findPaidWishes = function(req, res){
   console.log(userID);
   if(userID){
     Donation.find({paidDate:{$ne:null}})
-    .populate(_wish)
+    .populate('_wish')
         .exec(function(err, results) {
       if(err){
         console.log(err);
