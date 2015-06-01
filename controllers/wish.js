@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Wish = mongoose.model('Wish');
 var crypUtil = require('../services/auth/cryptoUtil');
+var lodash = require('lodash');
 var utility = require('../data/Utility');
 
 exports.AddWish = function(req, res) {
@@ -47,12 +48,20 @@ exports.findAll = function(req, res){
         var area = { center: location, radius: rad, unique: true, spherical: true }
         query.where('location').within().circle(area)
     }
+    
+    query.populate('_donation');
 
       query.exec(function(err, data) {
           if(err) {
             return utility.handleError(res, err);;
           }else{
-            return res.send(data);
+            //now we find all the wishes that are paid (have _donation.paidDate != null) 
+            console.log('before filter: ', data);
+            var result = lodash.filter(data._donation, function(item){
+              return item.paidDate;
+            });
+            console.log('after filter: ', result);
+            return res.send(result);
           }
       });
   }
@@ -98,7 +107,8 @@ exports.findWishesFromUser = function(req, res){
     if(userID) {
   	  Wish.find({_wishMaker: req.params.userID})
   	  .populate('_wishMaker', 'user_name')
-  //	  .populate('_charity', 'name')
+  	  .populate('_charity', 'name')
+      .populate('_donation', 'amount')
   	  .exec(function(err, data) {
   	    if(err) {
             return utility.handleError(res, err);;
