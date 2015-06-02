@@ -33,6 +33,9 @@ exports.findAll = function(req, res){
     //gets all wishes not are not from the current user
     var query = Wish.find({_wishMaker: {'$ne': userID}});
 
+    //gets new wishes only
+    query.where('wishStatus').equals('new');
+
     //gets location information from body
     var location = req.headers.location;
     var rad = req.headers.radius;
@@ -140,7 +143,7 @@ exports.findWishesFromFulfiller = function(req, res){
   var fflID = crypUtil.validateToken(req);
   var fflID2 = req.params.fulfillerID;
   if(fflID && fflID==fflID2){  
-    console.log(fflID);
+    // console.log(fflID);
     Wish.find({_fulfiller: fflID})
     .exec(function(err, data) {
       if(err) {
