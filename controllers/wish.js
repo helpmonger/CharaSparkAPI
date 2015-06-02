@@ -53,9 +53,13 @@ exports.findAll = function(req, res){
         var locArray = location.split(',').map(function(item) {
             return parseFloat(item);
         });
-        var area = { center: locArray, radius: rad, unique: false, spherical: true }
+
+        console.log('locArray is: ', locArray);
+        var area = { center: locArray, radius: rad, unique: true, spherical: true }
         // .where('location.length').gt(1);
         query.where('location').within().circle(area);
+
+
              
     }
     
@@ -65,10 +69,9 @@ exports.findAll = function(req, res){
           if(err) {
             return utility.handleError(res, err);;
           }else{
-            //now we find all the wishes that are paid (have _donation.paidDate != null) 
             console.log('before filter: ', data);
-            var result = lodash.filter(data._donation, function(item){
-              return item.paidDate;
+            var result = lodash.filter(data, function(item){
+              return item._donation && item._donation.paidDate;
             });
             console.log('after filter: ', result);
             return res.send(result);
