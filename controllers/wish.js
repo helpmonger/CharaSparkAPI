@@ -26,6 +26,7 @@ exports.AddWish = function(req, res) {
 }
 
 exports.findAll = function(req, res){
+    // console.log('headers are: ', req.headers);
   var userID = crypUtil.validateToken(req);
   if(userID) {
     console.log('the user id is: ', userID);
@@ -33,12 +34,12 @@ exports.findAll = function(req, res){
     var query = Wish.find({_wishMaker: {'$ne': userID}});
 
     //gets location information from body
-    var location = req.params.startingLoc;
-    var rad = req.params.radius;
+    var location = req.headers.location;
+    var rad = req.headers.radius;
     //use 4/1/2015 as default date
     var asOfDate = new Date(2015, 4, 1); 
 
-    if(req.params.asOfDate){
+    if(req.headers.asOfDate){
       asOfDate = new Date(req.body.asOfDate);
       console.log('as of date is: ', asOfDate);
       query.where('createdDate').gt(asOfDate);
@@ -46,8 +47,16 @@ exports.findAll = function(req, res){
 
     //if the location is set, find all wishes that are within (rad) miles within (location)
     if(location && rad){
-        var area = { center: location, radius: rad, unique: true, spherical: true }
-        query.where('location').within().circle(area)
+        console.log('got location and rad');
+        // console.log('loc is: ', location);
+        //convert location to number array
+        var locArray = location.split(',').map(function(item) {
+            return parseFloat(item);
+        });
+        var area = { center: locArray, radius: rad, unique: true, spherical: true }
+        // .where('location.length').gt(1);
+        query.where('location').within().circle(area);
+             
     }
     
     query.populate('_donation');
@@ -57,7 +66,7 @@ exports.findAll = function(req, res){
             return utility.handleError(res, err);;
           }else{
             //now we find all the wishes that are paid (have _donation.paidDate != null) 
-            console.log('before filter: ', data);
+            console.log('before filter: ', data.length);
             var result = lodash.filter(data._donation, function(item){
               return item.paidDate;
             });

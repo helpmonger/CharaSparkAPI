@@ -8,6 +8,7 @@ exports.genuuid =  function(){
 
 exports.validateToken = function(req){
 	var token = req.headers.authorization;
+	console.log('token is: ', token);
 	if(!token){
 		console.log('token null');
 		return null;
