@@ -1,4 +1,5 @@
 node_modules/
 .project
 .DS_Store
+install.sh
 *.log
