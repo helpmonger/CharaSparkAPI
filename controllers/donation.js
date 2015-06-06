@@ -8,6 +8,8 @@ var errorCodes = utility.ErrorCodes;
 exports.addDonation = function(req, res) {
 	var userID = crypUtil.validateToken(req);
 	if(userID){
+		//assigns the user as the donor
+		req.body._donor = userID;
 		Donation.create(req.body, function(err, results) {
 			if(err) {
 		      return utility.handleError(res);

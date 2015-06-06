@@ -25,8 +25,9 @@ exports.AddWish = function(req, res) {
     }
 }
 
+//fulfill a wish
 exports.findAll = function(req, res){
-    // console.log('headers are: ', req.headers);
+    console.log('headers are: ', req.headers);
   var userID = crypUtil.validateToken(req);
   if(userID) {
     console.log('the user id is: ', userID);
