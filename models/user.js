@@ -1,61 +1,66 @@
 var mongoose = require('mongoose'),
-bcrypt = require('bcrypt-nodejs'),
-Schema = mongoose.Schema;
+    bcrypt = require('bcrypt-nodejs'),
+    Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-  user_name: {
-		type: String
-	},
+    user_name: {
+        type: String
+    },
 
-	googleId: String,
+    googleId: String,
 
-	facebookId: String,
-	
-	active: Boolean,
+    facebookId: String,
 
-  email: {
-		type: String,
-		unique: true,
-		required: true,
-	},
-  first_name: String,
-  last_name: String,
-  password: {
-		type: String,
-		required: true,
-	},
-  phone: String,
-  createdDate: { 
-  	type: Date, 
-  	default: Date.now 
-  }
+    active: Boolean,
+
+    email: {
+        type: String,
+        unique: true,
+        required: true,
+    },
+
+    first_name: String,
+
+    last_name: String,
+
+    password: {
+        type: String,
+        required: true,
+    },
+
+    phone: String,
+    
+    createdDate: {
+        type: Date,
+        default: Date.now
+    }
 });
 
-UserSchema.methods.toJSON = function () {
-	var user = this.toObject();
-	delete user.password;
-	return user;
+UserSchema.methods.toJSON = function() {
+    var user = this.toObject();
+    delete user.password;
+    return user;
 };
 
-UserSchema.methods.comparePasswords = function (password, callback) {
-	bcrypt.compare(password, this.password, callback);
+UserSchema.methods.comparePasswords = function(password, callback) {
+    bcrypt.compare(password, this.password, callback);
 }
 
-UserSchema.pre('save', function (next) {
-	var user = this;
+UserSchema.pre('save', function(next) {
+    var user = this;
 
-	if (!user.isModified()) return next();
+    if (!user.isModified()) return next();
 
-	bcrypt.genSalt(10, function (err, salt) {
-		if (err) return next(err);
+    bcrypt.genSalt(10, function(err, salt) {
+        if (err) return next(err);
 
-		bcrypt.hash(user.password, salt, null, function (err, hash) {
-			if (err) return next(err);
+        bcrypt.hash(user.password, salt, null, function(err, hash) {
+            if (err) return next(err);
 
-			user.password = hash;
-			next();
-		})
-	})
+            user.password = hash;
+            next();
+        })
+    })
 })
 
 mongoose.model('User', UserSchema);

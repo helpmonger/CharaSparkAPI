@@ -8,23 +8,24 @@ module.exports = function(app) {
 
     var versionNo = '0.0.1';
 
-    // var Auth = require('./controllers/auth');
-    // app.post(PATH + 'register', Auth.SignUp);
-    // app.post(PATH +'login', Auth.Login);
+    //auth functions
 
     app.post(PATH + 'register', passport.authenticate('local-register', {
         failureFlash: true
     }), function(req, res) {
         var foo = req.flash();
-        console.log('foo is ', foo);
-        console.log('in register');
         createSendToken(req.user, res);
     });
 
     app.post(PATH + 'login', passport.authenticate('local-login'), function(req, res) {
-        console.log('in login');
         createSendToken(req.user, res);
     });
+
+    var User = require('./controllers/user');
+    app.get(PATH + 'user', User.findAll); // get all users
+    app.get(PATH + 'user/auth', User.getUserID); //return the access token based on userID - testing only
+    app.get(PATH + 'user/:userID', User.getProfile); // get user object by UserID
+    app.put(PATH + 'user/:userID', User.updateProfile); // update a user by UserID
 
 	var Test = require('./controllers/test');
     app.get(PATH + 'test', Test.hello);
@@ -60,17 +61,7 @@ module.exports = function(app) {
 
     // console.log('done with routes');
 
-    var User = require('./controllers/user');
-    // get all users
-    app.get(PATH + 'user', User.findAll);
-
-    //this will take the access token and return the userID.
-    //meant for testing only
-    app.get(PATH + 'user/auth', User.getUserID);
-    // get user object by UserID
-    app.get(PATH + 'user/:userID', User.getProfile);
-    // update a user by UserID
-    app.put(PATH + 'user/:userID', User.updateProfile);
+    
 
     //test
     app.get('/flash', function(req, res) {

@@ -5,7 +5,8 @@ var WishSchema = new Schema({
 
     _wishMaker: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     _fulfiller: {
         type: Schema.Types.ObjectId,
@@ -13,7 +14,8 @@ var WishSchema = new Schema({
     },
     _charity: {
         type: Schema.Types.ObjectId,
-        ref: 'Charity'
+        ref: 'Charity',
+        required: true
     },
     _donation: {
         type: Schema.Types.ObjectId,
