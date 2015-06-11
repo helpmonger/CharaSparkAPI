@@ -22,8 +22,8 @@ module.exports = function(app) {
     });
 
     var User = require('./controllers/user');
+    app.get(PATH + 'user/auth', User.getUserID); //return the userID based on access token - testing only
     app.get(PATH + 'user', User.findAll); // get all users
-    app.get(PATH + 'user/auth', User.getUserID); //return the access token based on userID - testing only
     app.get(PATH + 'user/:userID', User.getProfile); // get user object by UserID
     app.put(PATH + 'user/:userID', User.updateProfile); // update a user by UserID
 
@@ -36,9 +36,9 @@ module.exports = function(app) {
 
     var Wish = require('./controllers/wish');
     app.post(PATH + 'wish', Wish.AddWish);
+    app.get(PATH + 'wish', Wish.findAll);
     app.get(PATH + 'wish/fulfiller/:fulfillerID', Wish.findWishesFromFulfiller);
     app.get(PATH + 'wish/user/:userID', Wish.findWishesFromUser);
-    app.get(PATH + 'wish', Wish.findAll);
     app.get(PATH + 'wish/PaidWishes', Wish.findPaidWishes);
     app.put(PATH + 'wish/:wishID', Wish.updateWish);
     app.get(PATH + 'wish/:wishID', Wish.findWish);

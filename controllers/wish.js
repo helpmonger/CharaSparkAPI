@@ -14,7 +14,7 @@ exports.AddWish = function(req, res) {
         console.log('after adding: ', req.body._wishMaker);
         Wish.create(req.body, function(err, data) {
             if (err) {
-                return utility.handleError(res, err);;
+                return utility.handleError(res, err);
             } else {
                 return res.send(data);
             }
@@ -22,7 +22,7 @@ exports.AddWish = function(req, res) {
     } else {
         return utility.handleAuthFailure(res);
     }
-}
+};
 
 //fulfill a wish
 exports.findAll = function(req, res) {
@@ -67,11 +67,8 @@ exports.findAll = function(req, res) {
                     radius: rad,
                     unique: true,
                     spherical: true
-                }
-                // .where('location.length').gt(1);
+                };
             query.where('location').within().circle(area);
-
-
 
         }
 
@@ -79,7 +76,7 @@ exports.findAll = function(req, res) {
 
         query.exec(function(err, data) {
             if (err) {
-                return utility.handleError(res, err);;
+                return utility.handleError(res, err);
             } else {
                 // console.log('before filter: ', data);
                 var result = lodash.filter(data, function(item) {
@@ -92,9 +89,7 @@ exports.findAll = function(req, res) {
     } else {
         return utility.handleAuthFailure(res);
     }
-
-}
-
+};
 
 //Updates wish, PUT
 exports.updateWish = function(req, res) {
@@ -103,7 +98,7 @@ exports.updateWish = function(req, res) {
         _id: req.params.wishID
     }, updateObj, function(err, data) {
         if (err) {
-            return utility.handleError(res, err);;
+            return utility.handleError(res, err);
         } else {
             return res.send(data);
         }
@@ -121,13 +116,12 @@ exports.findWish = function(req, res) {
         .populate('_wishMaker', 'user_name')
         .exec(function(err, data) {
             if (err) {
-                return utility.handleError(res, err);;
+                return utility.handleError(res, err);
             } else {
                 return res.send(data);
             }
         });
 };
-
 
 // Find all wishes from one user
 exports.findWishesFromUser = function(req, res) {
@@ -141,7 +135,7 @@ exports.findWishesFromUser = function(req, res) {
             .populate('_donation', 'amount')
             .exec(function(err, data) {
                 if (err) {
-                    return utility.handleError(res, err);;
+                    return utility.handleError(res, err);
                 } else {
                     return res.send(data);
                 }
@@ -149,20 +143,20 @@ exports.findWishesFromUser = function(req, res) {
     } else {
         return utility.handleAuthFailure(res);
     }
-}
+};
 
 // Find all wishes from one fulfiller
 exports.findWishesFromFulfiller = function(req, res) {
     var fflID = crypUtil.validateToken(req);
     var fflID2 = req.params.fulfillerID;
-    if (fflID && fflID == fflID2) {
+    if (fflID && fflID === fflID2) {
         // console.log(fflID);
         Wish.find({
                 _fulfiller: fflID
             })
             .exec(function(err, data) {
                 if (err) {
-                    return utility.handleError(res, err);;
+                    return utility.handleError(res, err);
                 } else {
                     return res.send(data);
                 }
@@ -194,4 +188,4 @@ exports.findPaidWishes = function(req, res) {
                 }
             });
     }
-}
+};
