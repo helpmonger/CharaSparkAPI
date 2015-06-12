@@ -8,7 +8,7 @@ exports.findAll = function(req, res) {
     if (userID) {
         User.find({}, function(err, results) {
             if (err) {
-                return utility.handleError(res);
+                return utility.handleError(res, err);
             } else {
                 return res.send(results);
             }
@@ -44,7 +44,7 @@ exports.getProfile = function(req, res) {
             _id: req.params.userID
         }, function(err, data) {
             if (err) {
-                return utility.handleError(res);
+                return utility.handleError(res, err);
             } else {
                 return res.send(data);
             }
@@ -64,7 +64,7 @@ exports.updateProfile = function(req, res) {
     if (userID && userID === userID2) {
         User.findOneAndUpdate(query, update, function(err, data) {
             if (err) {
-                return utility.handleError(res);
+                return utility.handleError(res, err);
             } else {
                 return res.send(data);
             }

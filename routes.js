@@ -27,7 +27,7 @@ module.exports = function(app) {
     app.get(PATH + 'user/:userID', User.getProfile); // get user object by UserID
     app.put(PATH + 'user/:userID', User.updateProfile); // update a user by UserID
 
-	var Test = require('./controllers/test');
+    var Test = require('./controllers/test');
     app.get(PATH + 'test', Test.hello);
 
     var Braintree = require('./controllers/braintree');
@@ -39,7 +39,7 @@ module.exports = function(app) {
     app.get(PATH + 'wish', Wish.findAll);
     app.get(PATH + 'wish/fulfiller/:fulfillerID', Wish.findWishesFromFulfiller);
     app.get(PATH + 'wish/user/:userID', Wish.findWishesFromUser);
-    app.get(PATH + 'wish/PaidWishes', Wish.findPaidWishes);
+    // app.get(PATH + 'wish/PaidWishes', Wish.findPaidWishes); //obsolete
     app.put(PATH + 'wish/:wishID', Wish.updateWish);
     app.get(PATH + 'wish/:wishID', Wish.findWish);
 
@@ -48,9 +48,8 @@ module.exports = function(app) {
     app.get(PATH + 'donation', Donation.findAll);
     app.put(PATH + 'donation/:donationID', Donation.updateDonation);
     app.get(PATH + 'donation/:donationID', Donation.findDonation);
-
-    app.get(PATH + 'donation/user/:userID', Donation.findDonationsFromUser);
     app.get(PATH + 'donation/charity/:charityID', Donation.findDonationsFromCharity);
+    app.get(PATH + 'donation/user/:userID', Donation.findDonationsFromUser);
     app.get(PATH + 'donation/wish/:wishID', Donation.findDonationForWish);
 
     var Charity = require('./controllers/charity');
@@ -58,10 +57,6 @@ module.exports = function(app) {
     app.get(PATH + 'charity', Charity.findAll);
     app.put(PATH + 'charity/:charityID', Charity.updateCharity);
     app.get(PATH + 'charity/:charityID', Charity.findCharity);
-
-    // console.log('done with routes');
-
-    
 
     //test
     app.get('/flash', function(req, res) {
