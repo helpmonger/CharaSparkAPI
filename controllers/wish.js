@@ -72,7 +72,8 @@ exports.findAll = function(req, res) {
 
         }
 
-        query.populate('_donation');
+        query.populate('_donation')
+        .populate('_charity', 'name');
 
         query.exec(function(err, data) {
             if (err) {
@@ -132,7 +133,7 @@ exports.findWishesFromUser = function(req, res) {
             })
             .populate('_wishMaker', 'user_name')
             .populate('_charity', 'name')
-            .populate('_donation', 'amount')
+            .populate('_donation')
             .exec(function(err, data) {
                 if (err) {
                     return utility.handleError(res, err);
@@ -154,6 +155,8 @@ exports.findWishesFromFulfiller = function(req, res) {
         Wish.find({
                 _fulfiller: fflID
             })
+        .populate('_donation')
+        .populate('_charity', 'name')
             .exec(function(err, data) {
                 if (err) {
                     return utility.handleError(res, err);
