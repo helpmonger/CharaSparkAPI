@@ -78,11 +78,11 @@ exports.findAll = function(req, res) {
             if (err) {
                 return utility.handleError(res, err);
             } else {
-                // console.log('before filter: ', data);
+                console.log('before filter: ', data);
                 var result = lodash.filter(data, function(item) {
                     return item._donation && item._donation.paidDate;
                 });
-                // console.log('after filter: ', result);
+                console.log('after filter: ', result);
                 return res.send(result);
             }
         });

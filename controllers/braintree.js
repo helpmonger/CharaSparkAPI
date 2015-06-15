@@ -25,16 +25,12 @@ exports.getToken = function(req, res, next) {
 };
 
 exports.processPayment = function(req, res, next) {
-    console.log('req.body.amount is ' + req.params.amount);
-    console.log('req.body.nounce is ' + req.params.nounce);
-
-    // console.log(req.body);
-    // console.log(req.query);
-    // console.log(req.params);
-
+    console.log('req.body.amount is ' + req.body.amount);
+    console.log('req.body.nounce is ' + req.body.nounce);
+   
     gateway.transaction.sale({
-        amount: req.params.amount,
-        paymentMethodNonce: req.params.nounce,
+        amount: req.body.amount,
+        paymentMethodNonce: req.body.nounce,
         // submit_for_settlement: true,
     }, function(err, result) {
         if (err) {
