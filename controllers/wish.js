@@ -40,7 +40,7 @@ exports.findAll = function(req, res) {
         //gets new wishes only
         query.where('wishStatus').equals('new');
 
-        //gets location information from body
+        //gets location information from header
         var location = req.headers.location;
         var rad = req.headers.radius;
         //use 4/1/2015 as default date
@@ -64,7 +64,7 @@ exports.findAll = function(req, res) {
             console.log('locArray is: ', locArray);
             var area = {
                     center: locArray,
-                    radius: rad,
+                    radius: utility.milesToRadians(rad),
                     unique: true,
                     spherical: true
                 };
@@ -79,11 +79,11 @@ exports.findAll = function(req, res) {
             if (err) {
                 return utility.handleError(res, err);
             } else {
-                console.log('before filter: ', data);
+                // console.log('before filter: ', data);
                 var result = lodash.filter(data, function(item) {
                     return item._donation && item._donation.paidDate;
                 });
-                console.log('after filter: ', result);
+                // console.log('after filter: ', result);
                 return res.send(result);
             }
         });

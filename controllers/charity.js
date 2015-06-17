@@ -5,10 +5,38 @@ var utility = require('../data/Utility');
 
 //Gets all charities, GET
 exports.findAll = function(req, res) {
-    Charity.find({}, function(err, results) {
+    var query = Charity.find({});
+
+    //gets location information from body
+    var location = req.headers.location;
+    var rad = req.headers.radius;
+
+    if (location && rad) {
+        console.log('got location and rad');
+        console.log('loc is: ', location);
+        console.log('rad is: ', rad);
+        //convert location to number array
+        var locArray = location.split(',').map(function(item) {
+            return parseFloat(item);
+        });
+
+        console.log('locArray is: ', locArray);
+
+        var area = {
+                center: locArray,
+                radius: utility.milesToRadians(rad),
+                unique: true,
+                spherical: true
+            };
+        query.where('gps').within().circle(area);
+
+    }
+
+    query.exec(function(err, results) {
         if (err) {
             return utility.handleError(res, err);
         } else {
+            console.log('results are: ', results);
             return res.send(results);
         }
     });
