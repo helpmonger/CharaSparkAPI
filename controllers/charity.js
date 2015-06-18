@@ -36,7 +36,6 @@ exports.findAll = function(req, res) {
         if (err) {
             return utility.handleError(res, err);
         } else {
-            console.log('results are: ', results);
             return res.send(results);
         }
     });
