@@ -115,6 +115,7 @@ exports.findWish = function(req, res) {
         .populate('_charity')
         .populate('_donation')
         .populate('_wishMaker', 'user_name')
+        .populate('_fulfiller')
         .exec(function(err, data) {
             if (err) {
                 return utility.handleError(res, err);

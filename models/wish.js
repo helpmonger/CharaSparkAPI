@@ -32,7 +32,7 @@ var WishSchema = new Schema({
     //statuses:
     //new
     //pending (accepted by fulfiller, pending wish maker approval)
-    //proceeding
+    //progressing
     //completed
     //cancelled (cancelled by wishmaker)
     //aborted (cancelled by fulfiller)
