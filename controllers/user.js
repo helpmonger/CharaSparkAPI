@@ -18,6 +18,62 @@ exports.findAll = function(req, res) {
     }
 };
 
+exports.isEmailUnique = function(req, res) {
+    var email = req.body.email;
+
+    //console.log(email);
+    User.find({
+        email: email
+    }).limit(1).exec(function(err, results) {
+        if (err) {
+            return utility.handleError(res, err);
+        } else {
+            if (results && results.length > 0) {
+                console.log(results.length);
+                return res.send({
+                    "unique": false
+                })
+            } else {
+                //console.log(results);
+                return res.send({
+                    "unique": true
+                });
+
+            }
+
+        }
+    });
+
+};
+
+
+exports.isUserNameUnique = function(req, res) {
+    var userName = req.body.userName;
+    console.log(userName);
+    User.find({
+        user_name: userName
+
+    }).limit(1).exec(function(err, results) {
+        if (err) {
+            return utility.handleError(res, err);
+        } else {
+            if (results && results.length > 0) {
+                console.log(results.length);
+                return res.send({
+                    "unique": false
+                });
+            } else {
+                console.log(results.length);
+                return res.send({
+                    "unique": true
+                });
+            }
+
+        }
+    });
+
+};
+
 exports.getUserID = function(req, res) {
     var userID = crypUtil.validateToken(req);
     if (userID) {
