@@ -46,11 +46,20 @@ exports.signupConfirmation = function(req,res) {
     }]
     
 };
+
+var template_name = "signupConfirmationT";
+var template_content = [
+        {
+            "name": "example name",
+            "content": "example content"
+        }
+    ];
+
 var async = false;
 var ip_pool = "Main Pool";
 var send_at = "";
 
-mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+mandrill_client.messages.sendTemplate({"message": message, "template_name":template_name, "template_content": template_content,"async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
     console.log(result);
     /*
     [{
