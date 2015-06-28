@@ -1,6 +1,7 @@
 var crypt = require('crypto');
 var moment = require('moment');
 var jwt = require('jwt-simple');
+var config = require('./cryptoUtil.config')();
 
 exports.genuuid = function() {
     return crypt.randomBytes(48).toString('hex');
@@ -27,4 +28,18 @@ exports.validateToken = function(req) {
     }
     console.log('token valid');
     return payload.sub;
+};
+
+exports.encrypt = function(text) {
+    var cipher = crypt.createCipher(config.algorithm, config.password);
+    var crypted = cipher.update(text, 'utf8', 'hex');
+    crypted += cipher.final('hex');
+    return crypted;
+};
+
+exports.decrypt = function(text) {
+    var decipher = crypt.createDecipher(config.algorithm, config.password);
+    var dec = decipher.update(text, 'hex', 'utf8');
+    dec += decipher.final('utf8');
+    return dec;
 };

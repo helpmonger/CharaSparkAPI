@@ -11,7 +11,11 @@ var UserSchema = new Schema({
 
     facebookId: String,
 
-    active: Boolean,
+    status: {
+        type: String,
+        //valid values are: pending, active, disabled
+        default: 'pending'
+    },
 
     email: {
         type: String,
@@ -29,7 +33,7 @@ var UserSchema = new Schema({
     },
 
     phone: String,
-    
+
     createdDate: {
         type: Date,
         default: Date.now

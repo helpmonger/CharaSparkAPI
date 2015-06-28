@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var LocalStrategy = require('passport-local').Strategy;
+var cryptoUtil = require('./cryptoUtil');
 
 var strategyOptions = {
     usernameField: 'username',
@@ -42,6 +43,7 @@ exports.register = new LocalStrategy(strategyOptions, function(req, userName, pa
         user_name: userName
     };
 
+    //verify email is unique
     User.findOne(searchUser, function(err, user) {
         if (err) {
             handleError(err);
@@ -55,6 +57,7 @@ exports.register = new LocalStrategy(strategyOptions, function(req, userName, pa
             });
         }
 
+        //verify user name is unique
         User.findOne(searchUser2, function(err, user2) {
             if (err) {
                 handleError(err);
@@ -74,11 +77,15 @@ exports.register = new LocalStrategy(strategyOptions, function(req, userName, pa
                 password: password
             });
 
-            newUser.save(function(err) {
+            newUser.save(function(err, dbUser) {
                 if (err) {
                     handleError(err);
                     return done(err);
                 }
+                //send the activation email
+                var activation = cryptoUtil.encrypt({id: dbUser._id, createdDate: new Date()});
+                // dbUser.
+
                 done(null, newUser);
             }); //end of save
         }); //end of find one
