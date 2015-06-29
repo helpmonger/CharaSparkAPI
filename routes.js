@@ -62,6 +62,9 @@ module.exports = function(app) {
     app.put(PATH + 'charity/:charityID', Charity.updateCharity);
     app.get(PATH + 'charity/:charityID', Charity.findCharity);
 
+    var SendEmails = require('./controllers/sendEmails');
+    app.post(PATH + 'emails/signup', SendEmails.signupConfirmation); //sign up emails
+
     //test
     app.get('/flash', function(req, res) {
         console.log('flash');
