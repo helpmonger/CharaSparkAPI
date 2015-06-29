@@ -24,12 +24,12 @@ module.exports = function(app) {
 
 
     var User = require('./controllers/user');
-    app.get(PATH + 'user/auth', User.getUserID); //return the userID based on access token - testing only
-    app.get(PATH + 'user', User.findAll); // get all users
-    app.get(PATH + 'user/:userID', User.getProfile); // get user object by UserID
+//    app.get(PATH + 'user/auth', User.getUserID); //return the userID based on access token - testing only
+//    app.get(PATH + 'user', User.findAll); // get all users
+//    app.get(PATH + 'user/:userID', User.getProfile); // get user object by UserID
     app.put(PATH + 'user/:userID', User.updateProfile); // update a user by UserID
-    app.post(PATH + 'user/isEmailUnique', User.isEmailUnique);
-    app.post(PATH + 'user/isUserNameUnique', User.isUserNameUnique);
+//    app.post(PATH + 'user/isEmailUnique', User.isEmailUnique);
+//    app.post(PATH + 'user/isUserNameUnique', User.isUserNameUnique);
 
     var Test = require('./controllers/test');
     app.get(PATH + 'test', Test.hello);

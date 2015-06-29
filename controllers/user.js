@@ -112,13 +112,14 @@ exports.getProfile = function(req, res) {
 };
 
 exports.updateProfile = function(req, res) {
+	console.log('update profile...');
     var query = req.params.userID;
     var update = req.body;
     var userID = crypUtil.validateToken(req);
     var userID2 = req.params.userID;
 
     if (userID && userID === userID2) {
-        User.findOneAndUpdate(query, update, function(err, data) {
+        User.findOneAndUpdate({_id: query}, update, function(err, data) {
             if (err) {
                 return utility.handleError(res, err);
             } else {
