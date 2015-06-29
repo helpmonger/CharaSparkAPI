@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var LocalStrategy = require('passport-local').Strategy;
 var cryptoUtil = require('./cryptoUtil');
+var emailUtil = require('./emailUtil');
 
 var strategyOptions = {
     usernameField: 'username',
@@ -84,6 +85,7 @@ exports.register = new LocalStrategy(strategyOptions, function(req, userName, pa
                 }
                 //send the activation email
                 var activation = cryptoUtil.encrypt({id: dbUser._id, createdDate: new Date()});
+                emailUtil.sendActivationEmail(dbUser, activation);
                 // dbUser.
 
                 done(null, newUser);

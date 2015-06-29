@@ -49,7 +49,7 @@ exports.updateDonation = function(req, res) {
     } else {
         return utility.handleAuthFailure(res);
     }
-}
+};
 //
 exports.findDonation = function(req, res) {
     var userID = crypUtil.validateToken(req);
