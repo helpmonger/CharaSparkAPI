@@ -21,6 +21,7 @@
     "jsonwebtoken": "^5.0.0",
     "jwt-simple": "^0.3.0",
     "lodash": "^3.9.1",
+    "mandrill-api": "^1.0.45",
     "moment": "^2.10.2",
     "mongoose": "^4.0.2",
     "passport": "^0.2.1",
@@ -44,5 +45,3 @@
     "yargs": "^3.10.0"
   }
 }
-
-

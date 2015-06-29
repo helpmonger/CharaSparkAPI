@@ -30,16 +30,30 @@ exports.validateToken = function(req) {
     return payload.sub;
 };
 
-exports.encrypt = function(text) {
+exports.encrypt = function(obj) {
+    var jsonObj = JSON.stringify(obj);
     var cipher = crypt.createCipher(config.algorithm, config.password);
-    var crypted = cipher.update(text, 'utf8', 'hex');
+    var crypted = cipher.update(jsonObj, 'utf8', 'hex');
     crypted += cipher.final('hex');
     return crypted;
 };
 
-exports.decrypt = function(text) {
+exports.decrypt = function(obj) {
     var decipher = crypt.createDecipher(config.algorithm, config.password);
-    var dec = decipher.update(text, 'hex', 'utf8');
+    var dec = decipher.update(obj, 'hex', 'utf8');
     dec += decipher.final('utf8');
-    return dec;
+    var result = JSON.parse(dec, this.dateReviver);
+    return result;
+};
+
+exports.dateReviver = function (key, value) {
+    var a;
+    if (typeof value === 'string') {
+        a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+        if (a) {
+            return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4],
+                            +a[5], +a[6]));
+        }
+    }
+    return value;
 };

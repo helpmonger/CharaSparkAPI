@@ -5,4 +5,5 @@ module.exports = function() {
         algorithm:'aes-256-ctr',
         password:'LFuderET2s2ZEn',
     };
-}
+    return config;
+};
