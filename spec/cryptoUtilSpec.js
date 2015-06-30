@@ -41,4 +41,23 @@ describe("CanEncodeDecodeUser", function() {
     });
 });
 
+describe("CanEncodeDecodeID", function() {
+
+    var idToEncrypt = "5532eab18a3e5e42eff85190";
+    var result = null;
+
+    it("CanEncodeID", function() {
+        result = cryptUtil.hashID(idToEncrypt);
+        expect(result).toBeDefined();
+        expect(result).not.toBe(idToEncrypt);
+    });
+
+
+      it("CanDecodeID", function() {
+        result = cryptUtil.deCodeID(result);
+        expect(result).toBeDefined();
+        expect(result).toBe(idToEncrypt);
+    });
+});
+
 

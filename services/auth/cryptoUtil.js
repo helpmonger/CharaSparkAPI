@@ -2,6 +2,9 @@ var crypt = require('crypto');
 var moment = require('moment');
 var jwt = require('jwt-simple');
 var config = require('./cryptoUtil.config')();
+var Hashids = require("hashids");
+
+
 
 exports.genuuid = function() {
     return crypt.randomBytes(48).toString('hex');
@@ -45,6 +48,19 @@ exports.decrypt = function(obj) {
     var result = JSON.parse(dec, this.dateReviver);
     return result;
 };
+
+exports.hashID = function(id){
+    var hasher = new Hashids(config.password); //this is the salt
+    var hashedID = hasher.encodeHex(id);
+    return hashedID;
+}
+
+exports.deCodeID = function(hashedID){
+    var hasher = new Hashids(config.password); //this is the salt
+    var objectID = hasher.decodeHex(hashedID);
+    return objectID;
+    // return hashedID;
+}
 
 exports.dateReviver = function (key, value) {
     var a;
