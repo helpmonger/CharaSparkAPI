@@ -59,7 +59,6 @@ exports.deCodeID = function(hashedID){
     var hasher = new Hashids(config.password); //this is the salt
     var objectID = hasher.decodeHex(hashedID);
     return objectID;
-    // return hashedID;
 }
 
 exports.dateReviver = function (key, value) {

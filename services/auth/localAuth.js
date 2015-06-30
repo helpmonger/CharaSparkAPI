@@ -84,7 +84,7 @@ exports.register = new LocalStrategy(strategyOptions, function(req, userName, pa
                     return done(err);
                 }
                 //send the activation email
-                var activation = cryptoUtil.encrypt({id: dbUser._id, createdDate: new Date()});
+                var activation = cryptoUtil.hashID(dbUser._id);
                 emailUtil.sendActivationEmail(dbUser, activation);
                 // dbUser.
 
