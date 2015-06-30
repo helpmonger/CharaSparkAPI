@@ -8,7 +8,7 @@ exports.sendActivationEmail = function(user, activation) {
     var sender = "donotreply@charaspark.com";
     var senderName = "CharaSpark";
     var subject = "Please Activate Your Account";
-    var server = "http://localhost:8080/api/auth/";
+    var server = "http://localhost:8100/auth/";
 
     var message = {
         "html": "<p>Activate your account by clicking <a href=\"" + server + activation + "\">here</a>",

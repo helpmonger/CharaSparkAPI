@@ -53,7 +53,7 @@ exports.Login = function(req, res) {
 }; //end of login
 
 exports.Activate = function(req, res) {
-    var activation = req.params.activation;
+    var activation = req.body.activation;
     if (activation) {
         var userID = cryptoUtil.deCodeID(activation);
         var update = {
