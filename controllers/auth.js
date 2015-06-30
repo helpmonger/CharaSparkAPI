@@ -3,7 +3,8 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     passport = require('passport'),
     utility = require('../data/Utility'),
-    cryptoUtil = require('../services/auth/cryptoUtil');
+    cryptoUtil = require('../services/auth/cryptoUtil'),
+    emailUtil = require('../services/auth/emailUtil');
 
 
 //this method is no longer in use. 
@@ -91,3 +92,84 @@ exports.Activate = function(req, res) {
         return utility.handleError(res, 'the activation is missing');
     }
 };
+
+
+//the workflow: 
+//first the user clicks forgot password link in app
+//the app posts the email to the forgotpassword API
+//which will hash the userID and send the user an email with a password reset link. 
+//when the user click on the link, it will go to the website (front-end)
+//which will parse the hash and post it to the ResetPassword API. 
+//Finally the website will get a response and display the corresponding confirmation page
+
+
+exports.ForgotPassword = function(req, res) {
+    var email = req.body.email;
+
+    User.findOne({
+            email: email
+        },
+        function(err, dbUser) {
+            if (dbUser) {
+
+                //updates  forgotPassword = true
+                var update = {
+                    "forgotPassword": true
+                }
+                User.findOneAndUpdate({
+                    email: email
+                }, update, function(err, data) {
+                    if (err) {
+                        return utility.handleError(res, err);
+                    }
+                });
+
+                //generate the hash and send the password reset link
+                var hash = cryptoUtil.hashID(dbUser._id);
+                emailUtil.sendPasswordReset(dbUser, hash);
+            }
+
+            //send back a 200 response regardless if user is found
+            res.send();
+
+        });
+}
+
+exports.ResetPassword = function(req, res) {
+    var hash = req.body.resetHash;
+    var newPassword = req.body.password;
+
+    if (hash) {
+        var userID = cryptoUtil.deCodeID(hash);
+
+        //check if the forgotPassword = true
+         User.findOne({
+                _id: userID,
+                forgotPassword: false
+            },
+            function(err, data) {
+                if (data) { //the user has not requested to reset password
+                    return res.send({
+                        success: false
+                    });
+                } else { //we need to reset user's password
+                    var update = {
+                        password: newPassword,
+                        forgotPassword: false
+                    };
+
+                    User.findOneAndUpdate({
+                        _id: userID
+                    }, update, function(err, data) {
+                        if (err) {
+                            return utility.handleError(res, err);
+                        } else {
+                            return res.send({
+                                success: true
+                            });
+                        }
+                    });
+                }
+            });
+    }
+}

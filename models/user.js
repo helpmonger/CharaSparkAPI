@@ -37,6 +37,11 @@ var UserSchema = new Schema({
     createdDate: {
         type: Date,
         default: Date.now
+    },
+
+    forgotPassword: {
+        type: Boolean,
+        default: false
     }
 });
 
