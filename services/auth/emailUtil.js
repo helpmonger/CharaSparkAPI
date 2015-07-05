@@ -3,15 +3,17 @@ var mandrill_client = new mandrill.Mandrill('PqEppqWRBHT7Pt1SsBcvDQ');
 
 exports.sendActivationEmail = function(user, activation) {
     //please modify these when testing
-    var receiver = user.email;
+    var receiver = "beetz12@gmail.com";
     var receiverName = "Chuck Norris";
     var sender = "donotreply@charaspark.com";
     var senderName = "CharaSpark";
     var subject = "Please Activate Your Account";
     var server = "http://localhost:8100/auth/";
 
+    //console.log("activation v. in send email function",activation);
+
     var message = {
-        "html": "<p>Activate your account by clicking <a href=\"" + server + activation + "\">here</a>",
+        "html": "",
         "text": "hello meeting",
         "subject": subject,
         "from_email": sender,
@@ -24,6 +26,17 @@ exports.sendActivationEmail = function(user, activation) {
         "headers": {
             "Reply-To": sender
         },
+        "merge_language":"handlebars",
+        "global_merge_vars":[
+        {
+            "name":"server",
+            "content":server
+        },
+        {
+            "name":"activation",
+            "content":activation
+        }
+        ],
         "important": false,
         "track_opens": null,
         "track_clicks": null,
@@ -48,7 +61,7 @@ exports.sendActivationEmail = function(user, activation) {
 
     };
 
-    var template_name = "signupConfirmationT";
+    var template_name = "signup";
     var template_content = [{
         "name": "example name",
         "content": "example content"
@@ -58,8 +71,10 @@ exports.sendActivationEmail = function(user, activation) {
     var ip_pool = "Main Pool";
     var send_at = "";
 
-    mandrill_client.messages.send({
+    mandrill_client.messages.sendTemplate({
         "message": message,
+        "template_name":template_name, 
+        "template_content": template_content,
         "async": async,
         "ip_pool": ip_pool,
         "send_at": send_at

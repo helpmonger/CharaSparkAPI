@@ -7,7 +7,7 @@ exports.signupConfirmation = function(req,res) {
     var receiverName = "HYtest2";
     var sender = "tsingpg@hotmail.com";
     var senderName = "HYtest1";
-    var subject = "mandrill test";
+    var subject = "CharaSpark";
 
    var message = {
     "html": "<p>I want a beautiful email</p>",
@@ -23,6 +23,14 @@ exports.signupConfirmation = function(req,res) {
     "headers": {
         "Reply-To": sender
     },
+    "merge_language":"handlebars",
+    "global_merge_vars":[
+        {
+            "name":"username",
+            "content":"Lily"
+        }
+
+    ],
     "important": false,
     "track_opens": null,
     "track_clicks": null,
@@ -59,7 +67,9 @@ var async = false;
 var ip_pool = "Main Pool";
 var send_at = "";
 
-mandrill_client.messages.sendTemplate({"message": message, "template_name":template_name, "template_content": template_content,"async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+var param = {"message": message, "template_name":template_name, "template_content": template_content,"async": async, "ip_pool": ip_pool, "send_at": send_at};
+
+mandrill_client.messages.sendTemplate(param, function(result) {
     console.log(result);
     /*
     [{
