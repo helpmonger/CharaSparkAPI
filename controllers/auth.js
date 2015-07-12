@@ -6,12 +6,6 @@ var mongoose = require('mongoose'),
     cryptoUtil = require('../services/auth/cryptoUtil'),
     emailUtil = require('../services/auth/emailUtil');
 
-var LocalStrategy = require('passport-local').Strategy;
-var strategyOptions = {
-	    usernameField: 'username',
-	    passReqToCallback: true
-	};
-
 //this method is no longer in use. 
 //See /services/auth/localAuth instead
 exports.Register = function(req, res) {
@@ -58,45 +52,43 @@ exports.Login = function(req, res) {
 
 }; //end of login
 
-exports.ChangePassword = new LocalStrategy(strategyOptions, function(req, username, password, done) {
+exports.ChangePassword = function(req, res) {
+    var hash = req.body.resetHash;
+    var newPassword = req.body.password;
 
-    var searchUser = {
-        user_name: username
-    };
+    if (hash) {
+        var userID = cryptoUtil.deCodeID(hash);
 
-    User.findOne(searchUser, function(err, user) {
-        if (err) return done(err);
+        //check if the forgotPassword = true
+        User.findOne({
+                _id: userID,
+                forgotPassword: false
+            },
+            function(err, data) {
+                if (data) { //the user has not requested to reset password
+                    return res.send({
+                        success: false
+                    });
+                } else { //we need to reset user's password
+                    var update = {
+                        password: newPassword,
+                        forgotPassword: false
+                    };
 
-        if (!user) return done(null, false, {
-            message: 'Wrong username/password'
-        });
-
-        user.comparePasswords(password, newPassword, function(err, isMatch) {
-            if (err) return done(err);
-
-            if (!isMatch) return done(null, false, {
-                message: 'Wrong password'
+                    User.findOneAndUpdate({
+                        _id: userID
+                    }, update, function(err, data) {
+                        if (err) {
+                            return utility.handleError(res, err);
+                        } else {
+                            return res.send({
+                                success: true
+                            });
+                        }
+                    });
+                }
             });
-            
-            else{
-            	// change password
-            	searchUser = {
-            			user_anme: username,
-            			password: newPassword
-            	};
-            	
-            	searchUser.save(function(err, dbUser) {
-                    if (err) {
-                        handleError(err);
-                        return done(err);
-                    }
-
-                    done(null, newUser);
-                }); //end of save
-            }
-            return done(null, user);
-        });
-    })
+    }
 }); // end of ChangePassword
 
 
