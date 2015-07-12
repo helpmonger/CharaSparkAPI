@@ -54,7 +54,7 @@ exports.Login = function(req, res) {
 
 exports.ChangePassword = function(req, res) {
 
-}); // end of ChangePassword
+}; // end of ChangePassword
 
 
 exports.Activate = function(req, res) {
