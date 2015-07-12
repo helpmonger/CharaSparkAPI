@@ -6,6 +6,11 @@ var mongoose = require('mongoose'),
     cryptoUtil = require('../services/auth/cryptoUtil'),
     emailUtil = require('../services/auth/emailUtil');
 
+var LocalStrategy = require('passport-local').Strategy;
+var strategyOptions = {
+	    usernameField: 'username',
+	    passReqToCallback: true
+	};
 
 //this method is no longer in use. 
 //See /services/auth/localAuth instead
@@ -52,6 +57,48 @@ exports.Login = function(req, res) {
     });
 
 }; //end of login
+
+exports.ChangePassword = new LocalStrategy(strategyOptions, function(req, username, password, done) {
+
+    var searchUser = {
+        user_name: username
+    };
+
+    User.findOne(searchUser, function(err, user) {
+        if (err) return done(err);
+
+        if (!user) return done(null, false, {
+            message: 'Wrong username/password'
+        });
+
+        user.comparePasswords(password, newPassword, function(err, isMatch) {
+            if (err) return done(err);
+
+            if (!isMatch) return done(null, false, {
+                message: 'Wrong password'
+            });
+            
+            else{
+            	// change password
+            	searchUser = {
+            			user_anme: username,
+            			password: newPassword
+            	};
+            	
+            	searchUser.save(function(err, dbUser) {
+                    if (err) {
+                        handleError(err);
+                        return done(err);
+                    }
+
+                    done(null, newUser);
+                }); //end of save
+            }
+            return done(null, user);
+        });
+    })
+}); // end of ChangePassword
+
 
 exports.Activate = function(req, res) {
     var activation = req.body.activation;
