@@ -26,6 +26,9 @@ module.exports = function(app) {
     app.post(PATH + 'auth/forgotPassword', Auth.ForgotPassword);
     app.post(PATH + 'auth/changePassword', Auth.ChangePassword);
     
+    app.post(PATH + 'auth/canResetPassword', Auth.CanResetPassword);
+    app.post(PATH + 'auth/resetPassword', Auth.ResetPassword);
+
     var User = require('./controllers/user');
     app.get(PATH + 'user/auth', User.getUserID); //return the userID based on access token - testing only
     app.get(PATH + 'user', User.findAll); // get all users

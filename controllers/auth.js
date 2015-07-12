@@ -102,6 +102,8 @@ exports.ChangePassword = new LocalStrategy(strategyOptions, function(req, userna
 
 exports.Activate = function(req, res) {
     var activation = req.body.activation;
+    console.log('activation is: ', activation);
+    
     if (activation) {
         var userID = cryptoUtil.deCodeID(activation);
         var update = {
@@ -180,7 +182,33 @@ exports.ForgotPassword = function(req, res) {
             res.send();
 
         });
-}
+};
+
+exports.CanResetPassword = function(req, res) {
+    var hash = req.body.resetHash;
+    var newPassword = req.body.password;
+
+    if (hash) {
+        var userID = cryptoUtil.deCodeID(hash);
+
+        //check if the forgotPassword = true
+        User.findOne({
+                _id: userID,
+                forgotPassword: false
+            },
+            function(err, data) {
+                if (data) { //the user has not requested to reset password
+                    return res.send({
+                        success: false
+                    });
+                } else { //we need to reset user's password
+                    return res.send({
+                        success: true
+                    });
+                }
+            });
+    }
+};
 
 exports.ResetPassword = function(req, res) {
     var hash = req.body.resetHash;
@@ -190,7 +218,7 @@ exports.ResetPassword = function(req, res) {
         var userID = cryptoUtil.deCodeID(hash);
 
         //check if the forgotPassword = true
-         User.findOne({
+        User.findOne({
                 _id: userID,
                 forgotPassword: false
             },
@@ -219,4 +247,4 @@ exports.ResetPassword = function(req, res) {
                 }
             });
     }
-}
+};
