@@ -3,6 +3,8 @@ var moment = require('moment');
 var jwt = require('jwt-simple');
 var config = require('./cryptoUtil.config')();
 var Hashids = require("hashids");
+var bcrypt = require('bcrypt-nodejs');
+var Q = require('q');
 
 
 
@@ -60,6 +62,29 @@ exports.deCodeID = function(hashedID){
     var objectID = hasher.decodeHex(hashedID);
     return objectID;
 }
+
+exports.hashPassword = function(password){
+
+    var deferred = Q.defer();
+    bcrypt.genSalt(10, function(err, salt) {
+        if (err) {
+            deferred.reject(err);
+        } else {
+            bcrypt.hash(password, salt, null, function(err, hash) {
+                if (err) {
+                    deferred.reject(err);
+                } else {
+                    deferred.resolve(hash);
+                }
+            });
+        }
+    });
+
+    return deferred.promise;
+
+}
+
+
 
 exports.dateReviver = function (key, value) {
     var a;

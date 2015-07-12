@@ -27,7 +27,8 @@
     "mongoose": "^4.0.2",
     "npm": "^2.12.0",
     "passport": "^0.2.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "q": "^1.4.1"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
@@ -36,9 +37,10 @@
     "gulp-jscs": "^1.6.0",
     "gulp-jshint": "^1.11.0",
     "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-nodemon": "^2.0.3",
     "gulp-print": "^1.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-util": "^2.2.14",
+    "gulp-util": "^3.0.6",
     "jasmine-core": "^2.3.4",
     "jshint-stylish": "^2.0.0",
     "karma": "^0.12.36",
