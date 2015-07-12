@@ -53,42 +53,7 @@ exports.Login = function(req, res) {
 }; //end of login
 
 exports.ChangePassword = function(req, res) {
-    var hash = req.body.resetHash;
-    var newPassword = req.body.password;
 
-    if (hash) {
-        var userID = cryptoUtil.deCodeID(hash);
-
-        //check if the forgotPassword = true
-        User.findOne({
-                _id: userID,
-                forgotPassword: false
-            },
-            function(err, data) {
-                if (data) { //the user has not requested to reset password
-                    return res.send({
-                        success: false
-                    });
-                } else { //we need to reset user's password
-                    var update = {
-                        password: newPassword,
-                        forgotPassword: false
-                    };
-
-                    User.findOneAndUpdate({
-                        _id: userID
-                    }, update, function(err, data) {
-                        if (err) {
-                            return utility.handleError(res, err);
-                        } else {
-                            return res.send({
-                                success: true
-                            });
-                        }
-                    });
-                }
-            });
-    }
 }); // end of ChangePassword
 
 
