@@ -7,7 +7,6 @@ var mongoose = require('mongoose'),
     emailUtil = require('../services/auth/emailUtil'),
     bcrypt = require('bcrypt-nodejs');
 
-
 //this method is no longer in use. 
 //See /services/auth/localAuth instead
 exports.Register = function(req, res) {
@@ -53,6 +52,11 @@ exports.Login = function(req, res) {
     });
 
 }; //end of login
+
+exports.ChangePassword = function(req, res) {
+
+}; // end of ChangePassword
+
 
 exports.Activate = function(req, res) {
     var activation = req.body.activation;

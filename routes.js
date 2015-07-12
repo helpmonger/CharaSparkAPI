@@ -24,6 +24,8 @@ module.exports = function(app) {
     var Auth = require('./controllers/auth');
     app.post(PATH + 'auth/activation', Auth.Activate);
     app.post(PATH + 'auth/forgotPassword', Auth.ForgotPassword);
+    app.post(PATH + 'auth/changePassword', Auth.ChangePassword);
+    
     app.post(PATH + 'auth/canResetPassword', Auth.CanResetPassword);
     app.post(PATH + 'auth/resetPassword', Auth.ResetPassword);
 
