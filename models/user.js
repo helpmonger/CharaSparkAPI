@@ -66,6 +66,7 @@ UserSchema.pre('save', function(next) {
             return next(err);
         } else {
             user.password = data; 
+            next();
         }
     });
 })
