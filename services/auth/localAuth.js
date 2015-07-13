@@ -35,7 +35,7 @@ exports.login = new LocalStrategy(strategyOptions, function(req, username, passw
 });
 
 exports.register = new LocalStrategy(strategyOptions, function(req, userName, password, done) {
-
+    console.log('in register');
     var searchUser = {
         email: req.body.email
     };
@@ -78,6 +78,8 @@ exports.register = new LocalStrategy(strategyOptions, function(req, userName, pa
                 password: password
             });
 
+            console.log('created new user');
+
             newUser.save(function(err, dbUser) {
                 if (err) {
                     handleError(err);
@@ -85,8 +87,10 @@ exports.register = new LocalStrategy(strategyOptions, function(req, userName, pa
                 }
                 //send the activation email
                 var activation = cryptoUtil.hashID(dbUser._id);
-                //console.log("activation v. in localAuth: ",activation);
+
+                console.log("got activation: ", activation);
                 emailUtil.sendActivationEmail(dbUser, activation);
+                console.log('sent email');
                 // dbUser.
 
                 done(null, newUser);

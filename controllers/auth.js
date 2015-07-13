@@ -5,7 +5,8 @@ var mongoose = require('mongoose'),
     utility = require('../data/Utility'),
     bcrypt = require('bcrypt-nodejs'),
     cryptoUtil = require('../services/auth/cryptoUtil'),
-    emailUtil = require('../services/auth/emailUtil');
+    emailUtil = require('../services/auth/emailUtil'),
+    bcrypt = require('bcrypt-nodejs');
 
 //this method is no longer in use. 
 //See /services/auth/localAuth instead
@@ -120,7 +121,7 @@ exports.ChangePassword = function(req, res) {
 exports.Activate = function(req, res) {
     var activation = req.body.activation;
     console.log('activation is: ', activation);
-    
+
     if (activation) {
         var userID = cryptoUtil.deCodeID(activation);
         var update = {
@@ -180,8 +181,9 @@ exports.ForgotPassword = function(req, res) {
 
                 //updates  forgotPassword = true
                 var update = {
-                    "forgotPassword": true
-                }
+                        "forgotPassword": true
+                    }
+                    //sets the forgotPassword flag = true
                 User.findOneAndUpdate({
                     email: email
                 }, update, function(err, data) {
@@ -201,6 +203,8 @@ exports.ForgotPassword = function(req, res) {
         });
 };
 
+//determine if the user is allowed to reset the password.
+
 exports.CanResetPassword = function(req, res) {
     var hash = req.body.resetHash;
     var newPassword = req.body.password;
@@ -214,7 +218,7 @@ exports.CanResetPassword = function(req, res) {
                 forgotPassword: false
             },
             function(err, data) {
-                if (data) { //the user has not requested to reset password
+                if (data) { //forgotPassword = false which means the user did not requested to reset password
                     return res.send({
                         success: false
                     });
@@ -231,6 +235,12 @@ exports.ResetPassword = function(req, res) {
     var hash = req.body.resetHash;
     var newPassword = req.body.newPassword;
 
+    if (!newPassword) {
+        console.log('the new password cannot be null');
+        return;
+    }
+
+
     if (hash) {
         var userID = cryptoUtil.deCodeID(hash);
 
@@ -240,11 +250,22 @@ exports.ResetPassword = function(req, res) {
                 forgotPassword: false
             },
             function(err, data) {
-                if (data) { //the user has not requested to reset password
+                if (data) { //forgotPassword = false which means the user did not request to reset password
                     return res.send({
                         success: false
                     });
                 } else { //we need to reset user's password
+
+                    //first hash the password
+                    cryptoUtil.hashPassword(newPassword).then(function(data, err) {
+                        if (err) {
+                            return res.send({
+                                success: false
+                            });
+                        } else {
+                            newPassword = data;
+                        }
+                    });
                     var update = {
                         password: newPassword,
                         forgotPassword: false

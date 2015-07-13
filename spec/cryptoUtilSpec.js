@@ -3,8 +3,8 @@ var cryptUtil = require('../services/auth/cryptoUtil');
 
 describe("CanEncodeDecodeString", function() {
 
-	var stringToEncrypt = "blah foo";
-	var result = null;
+    var stringToEncrypt = "blah foo";
+    var result = null;
 
     it("CanEncodeString", function() {
         result = cryptUtil.encrypt(stringToEncrypt);
@@ -13,7 +13,7 @@ describe("CanEncodeDecodeString", function() {
     });
 
 
-      it("CanDecodeString", function() {
+    it("CanDecodeString", function() {
         result = cryptUtil.decrypt(result);
         expect(result).toBeDefined();
         expect(result).toBe(stringToEncrypt);
@@ -22,8 +22,11 @@ describe("CanEncodeDecodeString", function() {
 
 describe("CanEncodeDecodeUser", function() {
 
-	var userToEncrypt = {id: "5532eab18a3e5e42eff85190", createdDate: new Date()};
-	var result = null;
+    var userToEncrypt = {
+        id: "5532eab18a3e5e42eff85190",
+        createdDate: new Date()
+    };
+    var result = null;
 
     it("CanEncodeObject", function() {
         result = cryptUtil.encrypt(userToEncrypt);
@@ -32,7 +35,7 @@ describe("CanEncodeDecodeUser", function() {
     });
 
 
-      it("CanDecodeObject", function() {
+    it("CanDecodeObject", function() {
         result = cryptUtil.decrypt(result);
         expect(result).toBeDefined();
         expect(result.id).toBe(userToEncrypt.id);
@@ -53,11 +56,34 @@ describe("CanEncodeDecodeID", function() {
     });
 
 
-      it("CanDecodeID", function() {
+    it("CanDecodeID", function() {
         result = cryptUtil.deCodeID(result);
         expect(result).toBeDefined();
         expect(result).toBe(idToEncrypt);
     });
 });
 
+describe("CanHashUnhashPassword", function() {
 
+    var passwordToEncrypt = "test123";
+    var result = null;
+    var hash = '';
+
+    beforeEach(function(done) {
+      cryptUtil.hashPassword(passwordToEncrypt).then(function(data, err){
+            if(!err){
+                hash = data;
+            }
+            done();
+      });
+    });
+   
+
+
+    it("CanHashPassword", function() {
+        // var promise = cryptUtil.hashPassword(passwordToEncrypt);
+        expect(hash).toBeDefined();
+        expect(hash).not.toBe(passwordToEncrypt);
+    });
+
+});
