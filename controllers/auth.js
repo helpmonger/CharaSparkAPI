@@ -3,7 +3,6 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     passport = require('passport'),
     utility = require('../data/Utility'),
-    bcrypt = require('bcrypt-nodejs'),
     cryptoUtil = require('../services/auth/cryptoUtil'),
     emailUtil = require('../services/auth/emailUtil'),
     bcrypt = require('bcrypt-nodejs');
@@ -75,7 +74,7 @@ exports.ChangePassword = function(req, res) {
     	else{
             user.comparePasswords(oldPassword, function(err, isMatch) {
               if (err) res.send('error');
-              if (!isMatch) res.send('username/password not match');   
+              if (!isMatch) res.send({errorMsg: 'username/password not match'});   
               else {
             	  // Okay to update the password
             	  
@@ -85,28 +84,25 @@ exports.ChangePassword = function(req, res) {
                               success: false
                           });
                       } else {
-                          newPassword = data;
+                          hashedNewPassword = data;
+                    	  var update = {
+                    			  password: hashedNewPassword
+                    	  };
+                    	  
+                    	  User.findOneAndUpdate({
+                    		  _id: userID
+                    	  }, update, function(err, data) {
+                              if (err) {
+                                  res.send({errorMsg: 'error update'});
+                              } else {
+                                  res.send({
+                                      success: true
+                                  });
+                              }
+                    	  });                          
                       }
-                  });            	  
-            	  
-            	  
-            	  var update = {
-            			  password: newPassword
-            	  };
-            	  
-            	  User.findOneAndUpdate({
-            		  _id: userID
-            	  }, update, function(err, data) {
-                      if (err) {
-                          res.send('error update');
-                      } else {
-                          res.send({
-                              success: true
-                          });
-                      }
-            	  });
-            	  res.send('got it');
-              }
+                  }); // end of hashPassword        	  
+              } // end of else
             }); // end of comparePasswords
             
             }
