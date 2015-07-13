@@ -6,6 +6,6 @@ var $ = require('gulp-load-plugins')({
 });
 
 gulp.task('default', function() {
-    return gulp.src('spec/*.js')
+    return gulp.src('spec/testSpec.js')
         .pipe($.jasmine());
 });
