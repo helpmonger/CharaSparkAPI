@@ -3,6 +3,7 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     passport = require('passport'),
     utility = require('../data/Utility'),
+    bcrypt = require('bcrypt-nodejs'),
     cryptoUtil = require('../services/auth/cryptoUtil'),
     emailUtil = require('../services/auth/emailUtil');
 
@@ -53,7 +54,66 @@ exports.Login = function(req, res) {
 }; //end of login
 
 exports.ChangePassword = function(req, res) {
+	
+    var userName = req.body.user_name;
+    var newPassword = req.body.newPass;
+    var oldPassword = req.body.oldPass;
+    var userID = req.body._id
+    
+    var searchUser = {
+    		user_name: userName
+    };
+    
+//    res.send('running ChangePassword', newPassword + '/' + oldPassword + "/" + userName);
+    
+    User.findOne(searchUser, function(err, user){
+    	if(err){
+    		res.send('error');
+    	}
+    	
+    	else{
+            user.comparePasswords(oldPassword, function(err, isMatch) {
+              if (err) res.send('error');
+              if (!isMatch) res.send('username/password not match');   
+              else {
+            	  // Okay to update the password
+            	  
+            	  cryptoUtil.hashPassword(newPassword).then(function(data, err) {
+                      if (err) {
+                          return res.send({
+                              success: false
+                          });
+                      } else {
+                          newPassword = data;
+                      }
+                  });            	  
+            	  
+            	  
+            	  var update = {
+            			  password: newPassword
+            	  };
+            	  
+            	  User.findOneAndUpdate({
+            		  _id: userID
+            	  }, update, function(err, data) {
+                      if (err) {
+                          res.send('error update');
+                      } else {
+                          res.send({
+                              success: true
+                          });
+                      }
+            	  });
+            	  res.send('got it');
+              }
+            }); // end of comparePasswords
+            
+            }
+    	
+    });
+    
 
+    
 }; // end of ChangePassword
 
 
@@ -169,7 +229,7 @@ exports.CanResetPassword = function(req, res) {
 
 exports.ResetPassword = function(req, res) {
     var hash = req.body.resetHash;
-    var newPassword = req.body.password;
+    var newPassword = req.body.newPassword;
 
     if (hash) {
         var userID = cryptoUtil.deCodeID(hash);
