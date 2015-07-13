@@ -3,12 +3,12 @@ var mandrill_client = new mandrill.Mandrill('PqEppqWRBHT7Pt1SsBcvDQ');
 
 exports.sendActivationEmail = function(user, activation) {
     //please modify these when testing
-    var receiver = "beetz12@gmail.com";
-    var receiverName = "Chuck Norris";
+    var receiver = user.email;
+    var receiverName = user.user_name;
     var sender = "donotreply@charaspark.com";
     var senderName = "CharaSpark";
     var subject = "Please Activate Your Account";
-    var server = "http://localhost:8100/auth/";
+    var server = "http://charaspark.com/#/auth/activation/";
 
     //console.log("activation v. in send email function",activation);
 
@@ -80,7 +80,7 @@ exports.sendActivationEmail = function(user, activation) {
         "send_at": send_at
     }, function(result) {
         // mandrill_client.messages.sendTemplate({"message": message, "template_name":template_name, "template_content": template_content,"async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
-        console.log(result);
+        console.log('the email result is: ', result);
         /*
         [{
                 "email": "recipient.email@example.com",

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     bcrypt = require('bcrypt-nodejs'),
+    cryptoUtil = require('../services/auth/cryptoUtil'),
     Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
@@ -60,16 +61,14 @@ UserSchema.pre('save', function(next) {
 
     if (!user.isModified()) return next();
 
-    bcrypt.genSalt(10, function(err, salt) {
-        if (err) return next(err);
-
-        bcrypt.hash(user.password, salt, null, function(err, hash) {
-            if (err) return next(err);
-
-            user.password = hash;
+    cryptoUtil.hashPassword(user.password).then(function(data, err) {
+        if(err){
+            return next(err);
+        } else {
+            user.password = data; 
             next();
-        })
-    })
+        }
+    });
 })
 
 mongoose.model('User', UserSchema);
