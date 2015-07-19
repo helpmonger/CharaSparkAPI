@@ -134,6 +134,7 @@ exports.ForgotPassword = function(req, res) {
 
                 //generate the hash and send the password reset link
                 var hash = cryptoUtil.hashID(dbUser._id);
+                console.log('hash is: ', hash);
                 emailUtil.sendPasswordReset(dbUser, hash);
             }
 
@@ -175,54 +176,66 @@ exports.ResetPassword = function(req, res) {
     var hash = req.body.resetHash;
     var newPassword = req.body.password;
 
+    if (!hash) {
+        console.log('the hash needs to be supplied');
+        return res.send(400);
+    }
     if (!newPassword) {
         console.log('the new password cannot be null');
-        return;
+        return res.send(400);
     }
 
 
-    if (hash) {
-        var userID = cryptoUtil.deCodeID(hash);
 
-        //check if the forgotPassword = true
-        User.findOne({
-                _id: userID,
-                forgotPassword: false
-            },
-            function(err, data) {
-                if (data) { //forgotPassword = false which means the user did not request to reset password
-                    return res.send({
-                        success: false
-                    });
-                } else { //we need to reset user's password
 
-                    //first hash the password
-                    cryptoUtil.hashPassword(newPassword).then(function(data, err) {
-                        if (err) {
-                            return res.send({
-                                success: false
-                            });
-                        } else {
-                            newPassword = data;
-                        }
-                    });
-                    var update = {
-                        password: newPassword,
-                        forgotPassword: false
-                    };
+    var userID = cryptoUtil.deCodeID(hash);
+    console.log('got userID: ', userID);
 
-                    User.findOneAndUpdate({
-                        _id: userID
-                    }, update, function(err, data) {
-                        if (err) {
-                            return utility.handleError(res, err);
-                        } else {
-                            return res.send({
-                                success: true
-                            });
-                        }
-                    });
-                }
-            });
-    }
+    //check if the forgotPassword = true
+    User.findOne({
+            _id: userID,
+            forgotPassword: false
+        },
+        function(err, data) {
+            if (data) { //forgotPassword = false which means the user did not request to reset password
+                console.log('the user is not allowed to ResetPassword');
+                return res.send({
+                    success: false
+                });
+            } else { //we need to reset user's password
+                console.log('found user by id');
+                //first hash the password
+                cryptoUtil.hashPassword(newPassword).then(function(data, err) {
+                    if (err) {
+                        console.log('err hashing password: ', err);
+                        return res.send({
+                            success: false
+                        });
+                    } else {
+                        console.log('hashed new password and it is: ', data);
+                        newPassword = data;
+
+                        var update = {
+                            password: newPassword,
+                            forgotPassword: false
+                        };
+
+                        console.log('update is: ', update);
+
+                        User.findOneAndUpdate({
+                            _id: userID
+                        }, update, function(err, data) {
+                            if (err) {
+                                return utility.handleError(res, err);
+                            } else {
+                                return res.send({
+                                    success: true
+                                });
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
 };

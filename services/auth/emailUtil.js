@@ -99,11 +99,11 @@ exports.sendActivationEmail = function(user, activation) {
 exports.sendPasswordReset = function(user, resetHash) {
     //please modify these when testing
     var receiver = user.email;
-    var receiverName = "Chuck Norris";
+    var receiverName = user.user_name;
     var sender = "donotreply@charaspark.com";
     var senderName = "CharaSpark";
     var subject = "Reset Your Password";
-    var server = "http://localhost:8100/auth/";
+    var server = "http://charaspark.com/#/auth/forgotPassword/"
 
     var message = {
         "html": "<p>Reset your password by clicking <a href=\"" + server + resetHash + "\">here</a>",
