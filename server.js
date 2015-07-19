@@ -8,6 +8,9 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var cryptUtil = require('./services/auth/cryptoUtil');
 
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+
 var mongoUri = 'mongodb://testuser:coconut1@ds061651.mongolab.com:61651/charaspark';
 // var mongoUri = 'mongodb://mUser:test123@127.0.0.1:27017/charaspark';
 mongoose.connect(mongoUri);
