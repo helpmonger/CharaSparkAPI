@@ -54,7 +54,63 @@ exports.Login = function(req, res) {
 }; //end of login
 
 exports.ChangePassword = function(req, res) {
+	
+    var userName = req.body.user_name;
+    var newPassword = req.body.newPass;
+    var oldPassword = req.body.oldPass;
+    var userID = req.body._id
+    
+    var searchUser = {
+    		user_name: userName
+    };
+    
+//    res.send('running ChangePassword', newPassword + '/' + oldPassword + "/" + userName);
+    
+    User.findOne(searchUser, function(err, user){
+    	if(err){
+    		res.send('error');
+    	}
+    	
+    	else{
+            user.comparePasswords(oldPassword, function(err, isMatch) {
+              if (err) res.send('error');
+              if (!isMatch) res.send({errorMsg: 'username/password not match'});   
+              else {
+            	  // Okay to update the password
+            	  
+            	  cryptoUtil.hashPassword(newPassword).then(function(data, err) {
+                      if (err) {
+                          return res.send({
+                              success: false
+                          });
+                      } else {
+                          hashedNewPassword = data;
+                    	  var update = {
+                    			  password: hashedNewPassword
+                    	  };
+                    	  
+                    	  User.findOneAndUpdate({
+                    		  _id: userID
+                    	  }, update, function(err, data) {
+                              if (err) {
+                                  res.send({errorMsg: 'error update'});
+                              } else {
+                                  res.send({
+                                      success: true
+                                  });
+                              }
+                    	  });                          
+                      }
+                  }); // end of hashPassword        	  
+              } // end of else
+            }); // end of comparePasswords
+            
+            }
+    	
+    });
+    
 
+    
 }; // end of ChangePassword
 
 
@@ -174,7 +230,7 @@ exports.CanResetPassword = function(req, res) {
 
 exports.ResetPassword = function(req, res) {
     var hash = req.body.resetHash;
-    var newPassword = req.body.password;
+    var newPassword = req.body.newPassword;
 
     if (!hash) {
         console.log('the hash needs to be supplied');

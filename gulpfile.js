@@ -9,7 +9,7 @@ var config = require('./gulp.config')();
 var port = process.env.PORT || config.defaultPort;
 
 gulp.task('default', function() {
-    return gulp.src('spec/cryptoUtilSpec.js')
+    return gulp.src('spec/testSpec.js')
         .pipe($.jasmine());
 });
 
