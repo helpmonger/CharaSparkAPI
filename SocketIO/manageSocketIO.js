@@ -1,5 +1,6 @@
 
 // var lodash = require('lodash');
+var moment = require('moment');
 
 module.exports = function (io) {
 
@@ -29,12 +30,17 @@ io.on('connection', function(socket){
 
   socket.on('user:joined', function(user) {
     var message = user.name + ' joined the room';
+    console.log('user joined');
     io.emit('user:joined', {message: message, time: moment() })
+
   });
 
 
+
+  //handles msg from client
   socket.on('message:send', function(message){
-    console.log('message: ' + message);
+    io.emit('message:received', {message: 'hello there', time: moment() })
+    // console.log('message: ', message);
     console.log(JSON.stringify(message));
    
   });
