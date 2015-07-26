@@ -8,8 +8,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var cryptUtil = require('./services/auth/cryptoUtil');
 
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
+
 
 var mongoUri = 'mongodb://testuser:coconut1@ds061651.mongolab.com:61651/charaspark';
 // var mongoUri = 'mongodb://mUser:test123@127.0.0.1:27017/charaspark';
@@ -21,6 +20,8 @@ db.on('error', function() {
 });
 
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
 var portNumber = process.env.PORT || 8080;
 
@@ -87,6 +88,11 @@ app.set('port', portNumber);
 
 require('./routes')(app);
 
-app.listen(app.get('port'), function() {
-    console.log("Node app is running at localhost:" + app.get('port'))
+var manageIO = require('./SocketIO/manageSocketIO')(io);
+// app.listen(app.get('port'), function() {
+//     console.log("Node app is running at localhost:" + app.get('port'))
+// });
+
+server.listen(app.get('port'), function() {
+        console.log("Node app is running at localhost:" + app.get('port'))
 });
