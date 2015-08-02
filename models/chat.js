@@ -9,7 +9,11 @@ var ChatSchema = Schema({
     messages: [{
         user_name: String,
         message: String,
-        timestamp: Date
+        timestamp: {
+            type: Date,
+            default: Date.now
+        },
+        delivered: Boolean
     }]
 
 })

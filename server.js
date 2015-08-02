@@ -88,7 +88,7 @@ app.set('port', portNumber);
 
 require('./routes')(app);
 
-var manageIO = require('./SocketIO/manageSocketIO')(io);
+var manageIO = require('./Chat/manageSocketIO')(io);
 // app.listen(app.get('port'), function() {
 //     console.log("Node app is running at localhost:" + app.get('port'))
 // });

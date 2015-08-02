@@ -68,6 +68,15 @@ module.exports = function(app) {
     app.put(PATH + 'charity/:charityID', Charity.updateCharity);
     app.get(PATH + 'charity/:charityID', Charity.findCharity);
 
+    // var Chat = require('./controllers/chat');
+    // app.get(PATH + 'chat/:userID', Chat.findChatHistoryForUser);
+    
+
+    app.get(PATH + 'charity', Charity.findAll);
+    app.put(PATH + 'charity/:charityID', Charity.updateCharity);
+    app.get(PATH + 'charity/:charityID', Charity.findCharity);
+
+
     var SendEmails = require('./controllers/sendEmails');
     app.post(PATH + 'emails/signup/:userID', SendEmails.signupConfirmation); //sign up emails
 
