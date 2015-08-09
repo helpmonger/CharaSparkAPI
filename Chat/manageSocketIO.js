@@ -56,26 +56,31 @@ module.exports = function(io) {
                       console.log('name is: ', people[keys[i]].user);
                         if (people[keys[i]].user === whisperTo) {
                             var whisperId = keys[i];
-                            found = true;
+                            if(io.sockets.connected[whisperId]){ //make sure the user is still connected
+                                found = true;
+                                break;
+                            }
                             // if (socket.id === whisperId) { //can't whisper to ourselves
                             //     socket.emit("update", "You can't whisper to yourself.");
                             // }
-                            break;
                         }
                     }
 
                     if (found ) { //&& socket.id !== whisperId
                       console.log('found');
-                        socket.emit("send", {
-                            user_name: "You",
-                            message: whisperMsg,
-                          timestamp: new Date().getTime()});
-                        // console.log('other sock: ', socket(whisperId));
-                        // io.socket(whisperId).emit("chatMsg", {
-                        //     user_name: people[socket.id].name,
+                        // socket.emit("send", { //this is no longer necessary because it always will go to the 
+                        //     user_name: "You",
                         //     message: whisperMsg,
-                        //     timestamp: msgObj.msTime
-                        // });
+                        //   timestamp: new Date().getTime()});
+                        // console.log('other sock: ', socket(whisperId));
+                       
+                            
+                        io.sockets.connected[whisperId].emit("chatMsg", {
+                            user_name: people[socket.id].name,
+                            message: whisperMsg,
+                            timestamp: msgObj.msTime
+                        });
+                        
                     } else {
                       console.log('not found');
                         socket.emit("update", "Can't find " + whisperTo);
