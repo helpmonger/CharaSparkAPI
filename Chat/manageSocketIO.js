@@ -68,11 +68,11 @@ module.exports = function(io) {
 
                     if (found ) { //&& socket.id !== whisperId
                       console.log('found');
-                        // socket.emit("send", { //this is no longer necessary because it always will go to the 
-                        //     user_name: "You",
-                        //     message: whisperMsg,
-                        //   timestamp: new Date().getTime()});
-                        // console.log('other sock: ', socket(whisperId));
+                        socket.emit("send", { 
+                            user_name: "You",
+                            message: whisperMsg,
+                          timestamp: new Date().getTime()});
+                        console.log('other sock: ', socket(whisperId));
                        
                             
                         io.sockets.connected[whisperId].emit("chatMsg", {
