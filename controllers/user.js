@@ -93,9 +93,12 @@ exports.test = function(req, res) {
 };
 
 exports.getProfile = function(req, res) {
-    var userID = crypUtil.validateToken(req);
-    var userID2 = req.params.userID;
-    if (userID && userID === userID2) {
+	
+//    var userID = crypUtil.validateToken(req);
+//    var userID2 = req.params.userID;
+    var userID = req.params.userID;
+    
+    if (userID) {
         User.findOne({
             _id: req.params.userID
         }, function(err, data) {
