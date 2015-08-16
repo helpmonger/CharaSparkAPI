@@ -1,4 +1,4 @@
-// var lodash = require('lodash');
+var lodash = require('lodash');
 var moment = require('moment');
 
 
@@ -15,16 +15,13 @@ module.exports = function(io) {
             socket.on('joinserver', function(user) {
                 // var message = user.name + ' joined the room';
                 // io.emit('update', {message: message})
-                people[socket.id] = {
-                    "user": user.name
-                };
-                console.log('joined server and people is: ', people);
-                socket.emit("update", "You have connected to the server.");
-                sockets.push(socket);
+                if(AddUser(user, socket)){
+                    SendUserJoinUpdate(socket);
+                }
             });
             socket.on('disconnect', function() {
-                console.log('MongerChat - user disconnected');
-                // removeDisconnectedUser(socket);
+                RemoveUser(socket);
+                SendUserLeaveUpdate(socket);
             });
 
             socket.on('user:joined', function(user) {
@@ -33,7 +30,7 @@ module.exports = function(io) {
                 io.emit('user:joined', {
                     message: message,
                     time: moment()
-                })
+                });
 
             });
 
@@ -53,10 +50,10 @@ module.exports = function(io) {
                 console.log('keys is: ', keys);
                 if (keys.length != 0) {
                     for (var i = 0; i < keys.length; i++) {
-                      console.log('name is: ', people[keys[i]].user);
+                        console.log('name is: ', people[keys[i]].user);
                         if (people[keys[i]].user === whisperTo) {
                             var whisperId = keys[i];
-                            if(io.sockets.connected[whisperId]){ //make sure the user is still connected
+                            if (io.sockets.connected[whisperId]) { //make sure the user is still connected
                                 found = true;
                                 break;
                             }
@@ -66,33 +63,91 @@ module.exports = function(io) {
                         }
                     }
 
-                    if (found ) { //&& socket.id !== whisperId
-                      console.log('found');
-                        socket.emit("send", { 
+                    if (found) { //&& socket.id !== whisperId
+                        console.log('found');
+                        socket.emit("send", {
                             user_name: "You",
                             message: whisperMsg,
-                          timestamp: new Date().getTime()});
+                            timestamp: new Date().getTime()
+                        });
                         console.log('other sock: ', socket(whisperId));
-                       
-                            
+
+
                         io.sockets.connected[whisperId].emit("chatMsg", {
                             user_name: people[socket.id].name,
                             message: whisperMsg,
                             timestamp: msgObj.msTime
                         });
-                        
+
                     } else {
-                      console.log('not found');
+                        console.log('not found');
                         socket.emit("update", "Can't find " + whisperTo);
                     }
 
                 } else {
-                  console.log('keys.length == 0');
+                    console.log('keys.length == 0');
                 }
 
             });
 
+            function AddUserToPeople(user) {
+                people[socket.id] = {
+                    "user": user.name
+                };
+            }
 
+            function AddUserToSocket(socket) {
+                sockets.push(socket);
+            }
+
+            function SendUserJoinUpdate(socket) {
+                socket.emit("update", "You have connected to the server.");
+            }
+
+            function IsUserUnique(user) {
+                var result = lodash.findWhere(people, {
+                    'user': user.name
+                });
+                console.log('user is: ', user); 
+                console.log('people are: ', people);
+                console.log('result is: ', result);
+                return !result;
+            }
+
+            function AddUser(user, socket) {
+                if (IsUserUnique(user)) {
+                    AddUserToPeople(user);
+                    AddUserToSocket(socket);
+                    return true;
+                } else {
+                    console.log('cannot add duplicate user!');
+                    return false;
+                }
+            }
+
+
+            function RemoveUserFromPeople(socket) {
+                people[socket.id] = '';
+            }
+
+            function RemoveUserFromSocket(socket) {
+                var index = sockets.indexOf(socket);
+                if (index > -1) {
+                    sockets.splice(index, 1);
+                }
+            }
+
+            function SendUserLeaveUpdate(socket) {
+                io.emit("update", "User has disconnected");
+                console.log('MongerChat - user disconnected');
+            }
+
+            function RemoveUser(socket) {
+
+                RemoveUserFromPeople(socket);
+                RemoveUserFromSocket(socket);
+                SendUserLeaveUpdate();
+            }
 
         }); //end of io.on
 
