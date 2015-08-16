@@ -10,14 +10,15 @@ module.exports = function(io) {
             var counter = 0;
             console.log('CharaSpark Chat - user connected');
 
-
+            printDiagnostics();
 
             socket.on('joinserver', function(user) {
                 // var message = user.name + ' joined the room';
                 // io.emit('update', {message: message})
-                if(AddUser(user, socket)){
-                    SendUserJoinUpdate(socket);
-                }
+                AddUser(user, socket)
+                SendUserJoinUpdate(socket);
+                printDiagnostics();
+                
             });
             socket.on('disconnect', function() {
                 RemoveUser(socket);
@@ -33,6 +34,7 @@ module.exports = function(io) {
                 });
 
             });
+
 
 
 
@@ -89,15 +91,47 @@ module.exports = function(io) {
                 }
 
             });
+            
+            function getSocketIDs(){
+                return lodash.pluck(sockets, 'id');
+            }
+
+            function printDiagnostics(){
+                console.log('people is: ', people);
+                var ids = getSocketIDs();
+                console.log('sockets are: ', ids);
+            }
+
+            function RemoveDuplicateUsers(userArg){
+                console.log('RemoveDuplicateUsersFromPeople');
+                lodash.forEach(people, function(user, socket) {
+                    if(user.name === userArg.name){
+                        console.log('removed user ' + user.name);
+                        RemoveUserFromPeople(socket);
+                        RemoveUserFromSocket(socket);
+                    }
+                });
+            }
+
+            
 
             function AddUserToPeople(user) {
+                console.log('add user before: ', people);
+                console.log('user is: ', user);
+
                 people[socket.id] = {
                     "user": user.name
                 };
+                console.log('add user after: ', people);
             }
 
             function AddUserToSocket(socket) {
-                sockets.push(socket);
+                console.log('add user to socket');
+                console.log('add socket before: ', getSocketIDs());
+                if(sockets.indexOf(socket) < 0){
+                    sockets.push(socket);
+                }
+                console.log('add socket after: ', getSocketIDs());
             }
 
             function SendUserJoinUpdate(socket) {
@@ -108,33 +142,40 @@ module.exports = function(io) {
                 var result = lodash.findWhere(people, {
                     'user': user.name
                 });
-                console.log('user is: ', user); 
+                console.log('user is: ', user);
                 console.log('people are: ', people);
                 console.log('result is: ', result);
                 return !result;
             }
 
             function AddUser(user, socket) {
-                if (IsUserUnique(user)) {
-                    AddUserToPeople(user);
-                    AddUserToSocket(socket);
-                    return true;
-                } else {
-                    console.log('cannot add duplicate user!');
-                    return false;
-                }
+                console.log('add user');
+                RemoveDuplicateUsers(user);
+                AddUserToPeople(user);
+                AddUserToSocket(socket);
+                return true;
+                // } else {
+                //     console.log('cannot add duplicate user!');
+                //     return false;
+                // }
             }
 
 
             function RemoveUserFromPeople(socket) {
                 people[socket.id] = '';
+                delete people[socket.id];
             }
 
-            function RemoveUserFromSocket(socket) {
-                var index = sockets.indexOf(socket);
+            function RemoveUserFromSocketByIndex(index) {
                 if (index > -1) {
                     sockets.splice(index, 1);
                 }
+            }
+
+
+            function RemoveUserFromSocket(socket) {
+                var index = sockets.indexOf(socket);
+                RemoveUserFromSocketByIndex(index);
             }
 
             function SendUserLeaveUpdate(socket) {
