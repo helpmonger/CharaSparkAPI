@@ -72,7 +72,7 @@ module.exports = function(io) {
                             message: whisperMsg,
                             timestamp: new Date().getTime()
                         });
-                        console.log('other sock: ', socket(whisperId));
+                        // console.log('other sock: ', socket(whisperId));
 
 
                         io.sockets.connected[whisperId].emit("chatMsg", {
